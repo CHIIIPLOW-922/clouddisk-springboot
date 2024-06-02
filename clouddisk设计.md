@@ -1,0 +1,35 @@
+### clouddisk网盘系统设计
+
+#### 系统架构
+
+- 前端框架： Electron、Vue3、ElementPlus(UI库)、Axios(接口请求)
+- 后端框架：SpringBoot、Mybatis(orm)
+- 数据库：MYSQL、Redis
+- OSS（对象存储系统）:MinIO
+
+
+
+#### 设计思路
+
+系统包含模块：用户模块、文件模块、后台管理、文件分享模块(待定后面看着做)
+
+用户模块设计：用户id用雪花算法生成(确保被拿到id也不会暴露系统使用用户数量)，用户可以通过邮箱验收验证码来注册用户，用户密码通过md5加密并存入数据库，存入用户账号、用户加密后密码、注册邮箱。登录时可以通过邮箱登录（邮箱登录就需要验证码而不输入密码）或者账号登录需要输入密码，验证码就存入redis并设置过期时间。还有设计字段存入用户头像地址，因为是网盘系统，所以给用户设置网盘空间以及网盘使用空间字段。系统管理需要知道用户注册时间以及用户最后在线时间
+
+```mysql
+CREATE TABLE IF NOT EXISTS `user` (
+	`id` bigint NOT NULL COMMENT 'user id',
+	`user_name` VARCHAR(20) DEFAULT NULL COMMENT 'username',
+	`email` VARCHAR(255) DEFAULT NULL COMMENT 'email',
+	`password` VARCHAR(50) DEFAULT NULL COMMENT 'password',
+	`register_time` DATETIME DEFAULT NULL COMMENT 'register time',
+	`last_online_time` DATETIME DEFAULT NULL COMMENT 'last online time',
+	`used_disk_space` bigint DEFAULT '0' COMMENT 'used space',
+	`total_disk_space` bigint DEFAULT NULL COMMENT 'total space',
+	PRIMARY KEY (`id`),
+	UNIQUE KEY `uni_email` (`email`),
+	UNIQUE KEY `uni_user_name` (`user_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='User Table';
+```
+
+
+
