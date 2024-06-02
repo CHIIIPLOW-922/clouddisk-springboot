@@ -28,8 +28,30 @@ CREATE TABLE IF NOT EXISTS `user` (
 	PRIMARY KEY (`id`),
 	UNIQUE KEY `uni_email` (`email`),
 	UNIQUE KEY `uni_user_name` (`user_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='User Table';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='User Table';
 ```
 
-
+文件模块设计：文件ID用雪花算法生成，文件模块需要关联用户id以便于连表查询对应文件所属用户，需要文件名字段记录文件名称，以及文件大小、文件类型、文件为目录文件夹还是普通文件、需要一个字段确定是否有上级文件夹、文件路径(存在MinIO中的路径)、文件上传时间、文件修改时间、文件上传状态、文件回收站时间、是否被删除
+表设计
+```mysql
+CREATE TABLE IF NOT EXISTS `file` (
+    `id` bigint NOT NULL COMMENT 'file_id',
+    `user_id` bigint NOT NULL COMMENT  'user id',
+    `file_name` VARCHAR(255) DEFAULT '未命名' COMMENT 'file name',
+    `file_size` bigint DEFAULT NULL COMMENT 'file size',
+    `file_type` tinyint(1) DEFAULT NULL COMMENT 'file type',
+    `file_path` VARCHAR(255) DEFAULT NULL COMMENT 'file path',
+    `folder_bool` tinyint(1) DEFAULT NULL COMMENT 'is folder?',
+    `file_folder` bigint DEFAULT NULL COMMENT 'file folder',
+    `upload_status` tinyint(1) DEFAULT NULL COMMENT 'upload_status',
+    `upload_time` DATETIME DEFAULT NULL COMMENT 'upload time',
+    `modify_time` DATETIME DEFAULT NULL COMMENT 'modify time',
+    `recycling_time` DATETIME DEFAULT NULL COMMENT 'recycling time',
+    `delete_flag` TINYINT(1) DEFAULT '0' COMMENT 'delete flag 0:normal、1:recycling、2:deleted',
+    primary key (`id`),
+    key `idx_user_id` (`user_id`),
+    key `idx_file_folder` (`file_folder`),
+    key `idx_upload_time` (`upload_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='File';
+```
 
