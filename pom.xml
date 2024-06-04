@@ -28,6 +28,7 @@
         <commons.lang3.version>3.4</commons.lang3.version>
         <commons.codec.version>1.9</commons.codec.version>
         <commons.io.version>2.5</commons.io.version>
+        <minio.version>7.0.2</minio.version>
         <mybatisplus.version>3.5.2</mybatisplus.version>
     </properties>
 
@@ -58,6 +59,12 @@
             </exclusions>
         </dependency>
 
+        <!--    MinIO    -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>${minio.version}</version>
+        </dependency>
         <!--    lombok    -->
         <dependency>
             <groupId>org.projectlombok</groupId>
