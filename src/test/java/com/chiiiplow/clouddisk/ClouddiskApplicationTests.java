@@ -9,7 +9,9 @@ import com.chiiiplow.clouddisk.dao.AdminMapper;
 import com.chiiiplow.clouddisk.dao.UserMapper;
 import com.chiiiplow.clouddisk.entity.Admin;
 import com.chiiiplow.clouddisk.entity.User;
+import com.chiiiplow.clouddisk.utils.MD5Utils;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.DigestUtils;
@@ -32,12 +34,28 @@ public class ClouddiskApplicationTests {
 
     @Test
     void contextLoads() {
+        User user = new User();
+        user.setUserName("Test1");
+        user.setUserNickname("CHIIIPLOW");
+        user.setEmail("q641484973@qq.com");
+        String salt = MD5Utils.generateSalt();
+        user.setSalt(salt);
+        String password = MD5Utils.encode("123456", salt);
+        user.setPassword(password);
+        System.out.println(userMapper.insert(user));
+
+    }
+
+    @Test
+    void test() {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
-        userQueryWrapper.like("user_name", "123");
-        List<User> users = userMapper.selectList(userQueryWrapper);
-        System.out.println(users);
-
-
+        userQueryWrapper.eq("user_name", "Test1");
+        User user = userMapper.selectOne(userQueryWrapper);
+        String loginPassword = "12345";
+        String salt = user.getSalt();
+        String encodeLoginPassword = MD5Utils.encode(loginPassword, salt);
+        String dataPassword = user.getPassword();
+        System.out.println(StringUtils.equals(dataPassword, encodeLoginPassword));
     }
 
 

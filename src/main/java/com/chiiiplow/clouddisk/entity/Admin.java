@@ -38,6 +38,11 @@ public class Admin implements Serializable {
     private String adminPassword;
 
     /**
+     * salt
+     */
+    private String salt;
+
+    /**
      * admin nickname
      */
     private String adminNickname;

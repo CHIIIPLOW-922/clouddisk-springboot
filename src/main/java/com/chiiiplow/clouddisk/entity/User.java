@@ -54,6 +54,11 @@ public class User implements Serializable {
     private String password;
 
     /**
+     * salt
+     */
+    private String salt;
+
+    /**
      * register time
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
