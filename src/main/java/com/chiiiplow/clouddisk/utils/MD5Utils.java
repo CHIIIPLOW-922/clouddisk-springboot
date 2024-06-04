@@ -4,6 +4,12 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Random;
 
+/**
+ * MD5工具类
+ *
+ * @author yangzhixiong
+ * @date 2024/06/04
+ */
 public class MD5Utils {
 
     public static String generateSalt() {

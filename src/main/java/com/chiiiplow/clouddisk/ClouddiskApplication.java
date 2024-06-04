@@ -3,6 +3,8 @@ package com.chiiiplow.clouddisk;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScans;
 
 /**
  * CloudDisk应用
@@ -11,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2024/06/02
  */
 @MapperScan(basePackages = "com.chiiiplow.clouddisk.dao")
+@ComponentScan(basePackages = "com.chiiiplow.clouddisk.*")
 @SpringBootApplication
 public class ClouddiskApplication {
     public static void main(String[] args) {
