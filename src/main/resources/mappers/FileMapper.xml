@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chiiiplow.clouddisk.dao.FileMapper">
+	<!--实体映射-->
+	<resultMap id="fileResultMap" type="com.chiiiplow.clouddisk.entity.File">
+		<!--file_id-->
+		<id column="id" property="id"/>
+		<!--user id-->
+		<result column="user_id" property="userId"/>
+		<!--file name-->
+		<result column="file_name" property="fileName"/>
+		<!--file size-->
+		<result column="file_size" property="fileSize"/>
+		<!--file type-->
+		<result column="file_type" property="fileType"/>
+		<!--file path-->
+		<result column="file_path" property="filePath"/>
+		<!--is folder?-->
+		<result column="folder_bool" property="folderBool"/>
+		<!--file folder-->
+		<result column="file_folder" property="fileFolder"/>
+		<!--upload_status-->
+		<result column="upload_status" property="uploadStatus"/>
+		<!--upload time-->
+		<result column="upload_time" property="uploadTime"/>
+		<!--modify time-->
+		<result column="modify_time" property="modifyTime"/>
+		<!--recycling time-->
+		<result column="recycling_time" property="recyclingTime"/>
+		<!--delete flag 0:normal、1:recycling、2:deleted-->
+		<result column="delete_flag" property="deleteFlag"/>
+	</resultMap>
+
+
+
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chiiiplow.clouddisk.dao.UserMapper">
+	<!--实体映射-->
+	<resultMap id="userResultMap" type="com.chiiiplow.clouddisk.entity.User">
+		<!--user id-->
+		<id column="id" property="id"/>
+		<!--username-->
+		<result column="user_name" property="userName"/>
+		<!--nickname-->
+		<result column="user_nickname" property="userNickname"/>
+		<!--avatar path-->
+		<result column="user_avatar_path" property="userAvatarPath"/>
+		<!--email-->
+		<result column="email" property="email"/>
+		<!--password-->
+		<result column="password" property="password"/>
+		<!--register time-->
+		<result column="register_time" property="registerTime"/>
+		<!--last online time-->
+		<result column="last_online_time" property="lastOnlineTime"/>
+		<!--used space-->
+		<result column="used_disk_space" property="usedDiskSpace"/>
+		<!--total space-->
+		<result column="total_disk_space" property="totalDiskSpace"/>
+	</resultMap>
+
+
+
+</mapper>

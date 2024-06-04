@@ -3,7 +3,7 @@
 #### 系统架构
 
 - 前端框架： Electron、Vue3、ElementPlus(UI库)、Axios(接口请求)
-- 后端框架：SpringBoot、Mybatis(orm)
+- 后端框架：SpringBoot、Mybatis-plus(orm)
 - 数据库：MYSQL、Redis
 - OSS（对象存储系统）:MinIO
 
@@ -67,7 +67,8 @@ CREATE TABLE IF NOT EXISTS `admin` (
     `admin_nickname` VARCHAR(20) DEFAULT NULL COMMENT 'admin nickname',
     `create_time` DATETIME DEFAULT NULL COMMENT 'create time',
     `modify_time` DATETIME DEFAULT NULL COMMENT 'modify time',
-    primary key (`id`)
+    primary key (`id`),
+    UNIQUE KEY `uni_admin_name` (`admin_account`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Admin';
 ```
 
