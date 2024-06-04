@@ -58,5 +58,18 @@ public class ClouddiskApplicationTests {
         System.out.println(StringUtils.equals(dataPassword, encodeLoginPassword));
     }
 
+    @Test
+    void test2() {
+        Admin admin = new Admin();
+        admin.setAdminAccount("123123123");
+        admin.setAdminNickname("CHIIIPLOW");
+        String salt = MD5Utils.generateSalt();
+        admin.setSalt(salt);
+        String encodePassword = MD5Utils.encode("123123", salt);
+        admin.setAdminPassword(encodePassword);
+        admin.setCreateTime(new Date());
+        adminMapper.insert(admin);
+    }
+
 
 }
