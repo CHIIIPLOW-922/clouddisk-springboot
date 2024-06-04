@@ -2,12 +2,13 @@ package com.chiiiplow.clouddisk;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.chiiiplow.clouddisk.common.R;
 import com.chiiiplow.clouddisk.constant.MinioProperties;
 import com.chiiiplow.clouddisk.dao.AdminMapper;
 import com.chiiiplow.clouddisk.dao.UserMapper;
 import com.chiiiplow.clouddisk.entity.Admin;
 import com.chiiiplow.clouddisk.entity.User;
-import com.chiiiplow.clouddisk.utils.MD5Utils;
+import com.chiiiplow.clouddisk.utils.SHA256Utils;
 import io.minio.MinioClient;
 import io.minio.errors.*;
 import io.minio.messages.Bucket;
@@ -46,9 +47,9 @@ public class ClouddiskApplicationTests {
         user.setUserName("Test1");
         user.setUserNickname("CHIIIPLOW");
         user.setEmail("q641484973@qq.com");
-        String salt = MD5Utils.generateSalt();
+        String salt = SHA256Utils.generateSalt();
         user.setSalt(salt);
-        String password = MD5Utils.encode("123456", salt);
+        String password = SHA256Utils.encode("123456", salt);
         user.setPassword(password);
         System.out.println(userMapper.insert(user));
 
@@ -61,7 +62,7 @@ public class ClouddiskApplicationTests {
         User user = userMapper.selectOne(userQueryWrapper);
         String loginPassword = "12345";
         String salt = user.getSalt();
-        String encodeLoginPassword = MD5Utils.encode(loginPassword, salt);
+        String encodeLoginPassword = SHA256Utils.encode(loginPassword, salt);
         String dataPassword = user.getPassword();
         System.out.println(StringUtils.equals(dataPassword, encodeLoginPassword));
     }
@@ -71,9 +72,9 @@ public class ClouddiskApplicationTests {
         Admin admin = new Admin();
         admin.setAdminAccount("123123123");
         admin.setAdminNickname("CHIIIPLOW");
-        String salt = MD5Utils.generateSalt();
+        String salt = SHA256Utils.generateSalt();
         admin.setSalt(salt);
-        String encodePassword = MD5Utils.encode("123123", salt);
+        String encodePassword = SHA256Utils.encode("353906413", salt);
         admin.setAdminPassword(encodePassword);
         admin.setCreateTime(new Date());
         adminMapper.insert(admin);
@@ -91,6 +92,14 @@ public class ClouddiskApplicationTests {
             Bucket bucket = buckets.stream().filter(item -> item.name().equals(minioProperties.getBucketName())).findFirst().orElse(null);
             System.out.println(bucket);
         }
+    }
+
+    @Test
+    void test4() {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("user_name", "123123");
+        User user = userMapper.selectOne(userQueryWrapper);
+        System.out.println(R.success(user));
     }
 
 
