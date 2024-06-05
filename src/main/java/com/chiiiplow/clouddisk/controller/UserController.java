@@ -20,13 +20,8 @@ public class UserController {
         // Generate captcha text
         String captchaText = CaptchaUtils.generateCaptchaText(4);
 
-        // Store the captcha text in session (optional, for validation later)
-        // HttpSession session = request.getSession();
-        // session.setAttribute("captcha", captchaText);
 
-        // Generate captcha image
         BufferedImage captchaImage = CaptchaUtils.generateCaptchaImage(captchaText);
-
         // Set response headers
         response.setContentType("image/png");
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");

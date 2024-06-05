@@ -1,4 +1,4 @@
-package com.chiiiplow.clouddisk.component;
+package com.chiiiplow.clouddisk.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
