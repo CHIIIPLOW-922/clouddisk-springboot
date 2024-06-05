@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 	`user_nickname` VARCHAR(20) DEFAULT NULL COMMENT 'nickname',
 	`user_avatar_path` VARCHAR(255) DEFAULT NULL COMMENT 'avatar path',
 	`email` VARCHAR(255) DEFAULT NULL COMMENT 'email',
-	`password` VARCHAR(50) DEFAULT NULL COMMENT 'password',
+	`password` VARCHAR(64) DEFAULT NULL COMMENT 'password',
 	`salt` VARCHAR(50) DEFAULT NULL COMMENT 'salt',
 	`register_time` DATETIME DEFAULT NULL COMMENT 'register time',
 	`last_online_time` DATETIME DEFAULT NULL COMMENT 'last online time',
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `file` (
 CREATE TABLE IF NOT EXISTS `admin` (
     `id` bigint NOT NULL COMMENT 'admin id',
     `admin_account` VARCHAR(20) DEFAULT NULL COMMENT 'admin account',
-    `admin_password` VARCHAR(50) DEFAULT NULL COMMENT 'admin password',
+    `admin_password` VARCHAR(64) DEFAULT NULL COMMENT 'admin password',
     `salt` VARCHAR(50) DEFAULT NULL COMMENT 'salt',
     `admin_nickname` VARCHAR(20) DEFAULT NULL COMMENT 'admin nickname',
     `create_time` DATETIME DEFAULT NULL COMMENT 'create time',

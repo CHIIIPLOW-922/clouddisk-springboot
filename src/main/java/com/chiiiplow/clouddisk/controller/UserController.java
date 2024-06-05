@@ -1,30 +1,41 @@
 package com.chiiiplow.clouddisk.controller;
 
-
-import com.chiiiplow.clouddisk.common.R;
-import com.chiiiplow.clouddisk.entity.User;
-import com.chiiiplow.clouddisk.service.UserService;
-import com.chiiiplow.clouddisk.service.impl.UserServiceImpl;
+import com.chiiiplow.clouddisk.utils.CaptchaUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import java.util.List;
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
-/**
- * 用户控制层
- *
- * @author yangzhixiong
- * @date 2024/06/04
- */
-@RestController
+@RestController("userController")
 @RequestMapping("/user")
 public class UserController {
 
-    @Resource
-    private UserService userService;
+
+    @GetMapping("/generateCaptcha")
+    public void generateCaptcha(HttpServletResponse response) throws IOException {
+        // Generate captcha text
+        String captchaText = CaptchaUtils.generateCaptchaText(4);
+
+        // Store the captcha text in session (optional, for validation later)
+        // HttpSession session = request.getSession();
+        // session.setAttribute("captcha", captchaText);
+
+        // Generate captcha image
+        BufferedImage captchaImage = CaptchaUtils.generateCaptchaImage(captchaText);
+
+        // Set response headers
+        response.setContentType("image/png");
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
+
+        // Write the image to the response output stream
+        ImageIO.write(captchaImage, "png", response.getOutputStream());
+    }
 
 
 }

@@ -4,7 +4,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import java.security.SecureRandom;
 import java.util.Base64;
-import java.util.Random;
 
 /**
  * SHA256工具类
