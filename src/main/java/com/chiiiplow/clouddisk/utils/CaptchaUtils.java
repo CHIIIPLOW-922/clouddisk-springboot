@@ -26,7 +26,7 @@ public class CaptchaUtils {
         graphics.setColor(Color.WHITE);
         graphics.fillRect(0, 0, width, height);
 
-        graphics.setFont(new Font("Arial", Font.LAYOUT_NO_LIMIT_CONTEXT, 30));
+        graphics.setFont(new Font("Fixedsys", Font.LAYOUT_NO_LIMIT_CONTEXT, 30));
         graphics.setColor(Color.getHSBColor(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat()));
 
         graphics.drawString(captchaText, 10, 35);

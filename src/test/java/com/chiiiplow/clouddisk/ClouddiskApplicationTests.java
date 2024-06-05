@@ -100,7 +100,6 @@ public class ClouddiskApplicationTests {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("user_name", "123123");
         User user = userMapper.selectOne(userQueryWrapper);
-        System.out.println(R.success(user));
     }
 
     @Test
