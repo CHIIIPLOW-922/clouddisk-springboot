@@ -31,6 +31,8 @@
         <minio.version>7.0.2</minio.version>
         <okhttp3.version>3.14.9</okhttp3.version>
         <mybatisplus.version>3.5.2</mybatisplus.version>
+        <springsecurity.version>2.7.10</springsecurity.version>
+        <security.version>5.7.8</security.version>
     </properties>
 
 
@@ -95,8 +97,22 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatisplus.version}</version>
         </dependency>
-
-
+        <!-- Spring Security -->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-security</artifactId>-->
+<!--            <version>${springsecurity.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.security</groupId>-->
+<!--            <artifactId>spring-security-config</artifactId>-->
+<!--            <version>${security.version}</version> &lt;!&ndash; 或者选择5.8.x系列的最新版本 &ndash;&gt;-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.security</groupId>-->
+<!--            <artifactId>spring-security-web</artifactId>-->
+<!--            <version>${security.version}</version> &lt;!&ndash; 或者选择5.8.x系列的最新版本 &ndash;&gt;-->
+<!--        </dependency>-->
         <!-- 数据库-->
         <dependency>
             <groupId>mysql</groupId>
