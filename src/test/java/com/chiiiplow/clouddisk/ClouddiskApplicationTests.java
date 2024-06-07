@@ -2,13 +2,14 @@ package com.chiiiplow.clouddisk;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.chiiiplow.clouddisk.common.R;
 import com.chiiiplow.clouddisk.constant.MinioProperties;
 import com.chiiiplow.clouddisk.dao.AdminMapper;
 import com.chiiiplow.clouddisk.dao.UserMapper;
 import com.chiiiplow.clouddisk.entity.Admin;
 import com.chiiiplow.clouddisk.entity.User;
+import com.chiiiplow.clouddisk.utils.JwtUtils;
 import com.chiiiplow.clouddisk.utils.SHA256Utils;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.minio.MinioClient;
 import io.minio.errors.*;
 import io.minio.messages.Bucket;
@@ -39,6 +40,9 @@ public class ClouddiskApplicationTests {
 
     @Autowired
     private MinioClient minioClient;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
 
 
@@ -129,8 +133,15 @@ public class ClouddiskApplicationTests {
             admin.setAdminPassword(encode);
             System.out.println(adminMapper.updateById(admin));
         }
+    }
 
-
+    @Test
+    void test7() throws JsonProcessingException {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("user_name", "Test1");
+        User user = userMapper.selectOne(userQueryWrapper);
+        String token = jwtUtils.generateToken(user);
+        System.out.println(jwtUtils.validateToken(token));
     }
 
 }

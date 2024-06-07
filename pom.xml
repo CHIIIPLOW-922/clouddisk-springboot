@@ -33,6 +33,7 @@
         <mybatisplus.version>3.5.2</mybatisplus.version>
         <springsecurity.version>2.7.10</springsecurity.version>
         <security.version>5.7.8</security.version>
+        <jwt.version>0.9.1</jwt.version>
     </properties>
 
 
@@ -84,6 +85,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
             <version>${springboot.version}</version>
+        </dependency>
+        <!-- JWT 相关依赖 -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jwt.version}</version>
         </dependency>
 
         <!--mybatis-->

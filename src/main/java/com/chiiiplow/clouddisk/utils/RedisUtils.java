@@ -70,4 +70,19 @@ public class RedisUtils<V> {
             return false;
         }
     }
+
+
+    /**
+     * 是否存在该key值
+     *
+     * @param key 钥匙
+     * @return boolean
+     */
+    public boolean hasKey(String key) {
+        try {
+            return redisTemplate.hasKey(key);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

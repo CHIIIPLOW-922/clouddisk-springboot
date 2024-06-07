@@ -1,16 +1,11 @@
 package com.chiiiplow.clouddisk.controller;
 
-import com.chiiiplow.clouddisk.common.R;
 import com.chiiiplow.clouddisk.common.Result;
 import com.chiiiplow.clouddisk.component.RedisComponent;
-import com.chiiiplow.clouddisk.exception.CustomException;
+import com.chiiiplow.clouddisk.entity.User;
 import com.chiiiplow.clouddisk.utils.CaptchaUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -32,9 +27,11 @@ public class UserController {
 
     @GetMapping("/generateCaptcha")
     public Result generateCaptcha(HttpServletResponse response, HttpServletRequest request) throws IOException {
+        String uniqueId = request.getHeader(X_UNIQUE_ID);
         // Generate captcha text
         String captchaText = CaptchaUtils.generateCaptchaText(4);
 
+        redisComponent.saveCaptchaKey(uniqueId, captchaText);
 
         BufferedImage captchaImage = CaptchaUtils.generateCaptchaImage(captchaText);
 
@@ -54,6 +51,13 @@ public class UserController {
         String dataImage = "data:image/png;base64," + base64Image;
         return Result.ok("操作成功", dataImage);
 
+    }
+
+    @PostMapping("/login")
+    public Result login(@RequestBody User user, HttpServletRequest request) {
+        String uniqueId = request.getHeader(X_UNIQUE_ID);
+        String captchaKey = redisComponent.getCaptchaKey(uniqueId);
+        return Result.ok("操作成功", captchaKey);
     }
 
 

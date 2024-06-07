@@ -10,4 +10,6 @@ public interface RedisConstants {
 
     String CAPTCHA_KEY = "clouddisk:captcha:";
 
+    String JWT_KEY = "clouddisk:jwt:";
+
 }
