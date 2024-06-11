@@ -53,7 +53,7 @@ public class CustomExceptionHandler {
         } else if (e instanceof BindException) {
             // BeanValidation GET object param
             BindException ex = (BindException) e;
-            String bindMessage = ((BindException) e).getAllErrors().stream().map(item -> item.getDefaultMessage()).collect(Collectors.toList()).get(0);
+            String bindMessage = ex.getAllErrors().stream().map(item -> item.getDefaultMessage()).collect(Collectors.toList()).get(0);
             if (!StringUtils.isEmpty(bindMessage)) {
                 message = bindMessage;
             }
