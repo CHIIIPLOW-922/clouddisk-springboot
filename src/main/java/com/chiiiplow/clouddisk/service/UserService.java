@@ -13,4 +13,6 @@ public interface UserService extends IService<User> {
     UserVO login(LoginVO loginVO, HttpServletRequest request);
 
     void register(RegisterVO registerVO);
+
+    void sendEmailVerifyCode(String email, String uniqueId);
 }

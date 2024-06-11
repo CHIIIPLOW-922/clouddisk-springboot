@@ -40,4 +40,9 @@ public class RedisComponent {
     }
 
 
+    public boolean saveEmailCode(String key, String code) {
+        return redisUtils.setex(RedisConstants.EMAIL_KEY + key, code, CommonConstants.ONE_MINUTE * 10);
+    }
+
+
 }

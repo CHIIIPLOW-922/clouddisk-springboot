@@ -12,4 +12,6 @@ public interface RedisConstants {
 
     String JWT_BLACK_LIST = "jwt:blacklist:";
 
+    String EMAIL_KEY = "clouddisk:email:";
+
 }

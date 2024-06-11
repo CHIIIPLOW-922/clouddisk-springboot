@@ -11,7 +11,7 @@ import com.chiiiplow.clouddisk.entity.User;
 import com.chiiiplow.clouddisk.entity.vo.UserVO;
 import com.chiiiplow.clouddisk.utils.JwtUtils;
 import com.chiiiplow.clouddisk.utils.SHA256Utils;
-import com.chiiiplow.clouddisk.utils.SendEmailUtils;
+import com.chiiiplow.clouddisk.utils.EmailUtils;
 import io.minio.MinioClient;
 import io.minio.errors.*;
 import io.minio.messages.Bucket;
@@ -55,7 +55,7 @@ public class ClouddiskApplicationTests {
     private RedisTemplate redisTemplate;
 
     @Autowired
-    private SendEmailUtils sendEmailUtils;
+    private EmailUtils sendEmailUtils;
 
 
 

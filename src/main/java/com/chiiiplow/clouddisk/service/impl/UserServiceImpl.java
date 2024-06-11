@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chiiiplow.clouddisk.component.RedisComponent;
 import com.chiiiplow.clouddisk.constant.CommonConstants;
-import com.chiiiplow.clouddisk.constant.RedisConstants;
 import com.chiiiplow.clouddisk.dao.UserMapper;
 import com.chiiiplow.clouddisk.entity.User;
 import com.chiiiplow.clouddisk.entity.vo.LoginVO;
@@ -14,6 +13,7 @@ import com.chiiiplow.clouddisk.exception.CustomException;
 import com.chiiiplow.clouddisk.service.UserService;
 import com.chiiiplow.clouddisk.utils.JwtUtils;
 import com.chiiiplow.clouddisk.utils.SHA256Utils;
+import com.chiiiplow.clouddisk.utils.EmailUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +39,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private RedisComponent redisComponent;
+
+    @Autowired
+    private EmailUtils emailUtils;
+
+
 
 
 
@@ -72,5 +77,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public void register(RegisterVO registerVO) {
         return;
+    }
+
+    @Override
+    public void sendEmailVerifyCode(String email, String uniqueId) {
+        String verifyCode = String.format("%06d", (int) (Math.random() * 1000000));
+        redisComponent.saveEmailCode(uniqueId, verifyCode);
+        emailUtils.sendEmail(email, "[Clouddisk网盘系统]短信验证", "[Clouddisk网盘系统] 亲爱的用户，感谢您使用我们的服务！您的验证码是：  "
+                + verifyCode + "  请在10分钟内输入此验证码进行验证。如果您没有请求此验证码，请忽略此邮件。谢谢！");
     }
 }

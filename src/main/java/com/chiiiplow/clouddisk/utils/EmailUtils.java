@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 
 
 @Component
-public class SendEmailUtils {
+public class EmailUtils {
 
     @Resource
     private JavaMailSender javaMailSender;

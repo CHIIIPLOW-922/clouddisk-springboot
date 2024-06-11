@@ -1,5 +1,7 @@
 package com.chiiiplow.clouddisk.constant;
 
+import java.util.regex.Pattern;
+
 /**
  * 常用常量
  *
@@ -20,4 +22,7 @@ public interface CommonConstants {
     String X_UNIQUE_ID = "X-Unique-Id";
 
     String HEADER_TOKEN = "Authorization";
+
+    String EMAIL_PATTERN = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+
 }
