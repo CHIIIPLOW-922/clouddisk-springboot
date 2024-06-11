@@ -2,14 +2,15 @@ package com.chiiiplow.clouddisk;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.chiiiplow.clouddisk.constant.MinioProperties;
 import com.chiiiplow.clouddisk.dao.AdminMapper;
 import com.chiiiplow.clouddisk.dao.UserMapper;
 import com.chiiiplow.clouddisk.entity.Admin;
 import com.chiiiplow.clouddisk.entity.User;
+import com.chiiiplow.clouddisk.entity.vo.UserVO;
 import com.chiiiplow.clouddisk.utils.JwtUtils;
 import com.chiiiplow.clouddisk.utils.SHA256Utils;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.minio.MinioClient;
 import io.minio.errors.*;
 import io.minio.messages.Bucket;
@@ -17,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
@@ -25,6 +27,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @SpringBootTest
 public class ClouddiskApplicationTests {
@@ -43,6 +46,12 @@ public class ClouddiskApplicationTests {
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    /**
+     * Redis 模板
+     */
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
 
@@ -107,7 +116,7 @@ public class ClouddiskApplicationTests {
     }
 
     @Test
-    void test5(){
+    void test5() {
         Admin admin = new Admin();
         admin.setAdminAccount("Admin2");
         admin.setAdminNickname("CHIIIPLOW-922");
@@ -120,7 +129,7 @@ public class ClouddiskApplicationTests {
     }
 
     @Test
-    void test6(){
+    void test6() {
         QueryWrapper<Admin> adminQueryWrapper = new QueryWrapper<>();
         adminQueryWrapper.eq("admin_account", "Admin2");
         Admin admin = adminMapper.selectOne(adminQueryWrapper);
@@ -135,13 +144,36 @@ public class ClouddiskApplicationTests {
         }
     }
 
+//    @Test
+//    void test7() throws JsonProcessingException {
+//        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+//        userQueryWrapper.eq("user_name", "Test1");
+//        User user = userMapper.selectOne(userQueryWrapper);
+//        UserJwt userJwt = new UserJwt();
+//        BeanUtils.copyProperties(user, userJwt);
+//
+//        String token = jwtUtils.generateToken(userJwt);
+//        System.out.println(jwtUtils.validateToken(token));
+//    }
+
     @Test
-    void test7() throws JsonProcessingException {
-        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
-        userQueryWrapper.eq("user_name", "Test1");
-        User user = userMapper.selectOne(userQueryWrapper);
-        String token = jwtUtils.generateToken(user);
-        System.out.println(jwtUtils.validateToken(token));
+    void test8() {
+        Set<String> keys = redisTemplate.keys("*");
+        if (!keys.isEmpty()) {
+            for (String key : keys) {
+                System.out.println(key + " : " + redisTemplate.opsForValue().get(key) + " : " + redisTemplate.getExpire(key));
+            }
+        }
+
     }
 
+
+    @Test
+    void test9() {
+        UserVO userVO = new UserVO();
+        userVO.setId(IdWorker.getId());
+        userVO.setUserName("123");
+        String s = jwtUtils.generateJwt(userVO);
+        System.out.println(s);
+    }
 }

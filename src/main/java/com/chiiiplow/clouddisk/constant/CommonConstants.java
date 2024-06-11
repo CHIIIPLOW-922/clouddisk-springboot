@@ -16,11 +16,8 @@ public interface CommonConstants {
 
     long ONE_DAY = 24 * ONE_HOUR;
 
-    long ONE_WEEK = 7 * ONE_DAY;
 
-    long ONE_MONTH = 30 * ONE_DAY;
+    String X_UNIQUE_ID = "X-Unique-Id";
 
-    long ONE_YEAR = 365 * ONE_DAY;
-
-    String JWT_SECRET_KEY = "chiiiplow";
+    String HEADER_TOKEN = "Authorization";
 }
