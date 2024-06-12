@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.io.IOException;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,12 +64,13 @@ public class UserController extends BaseController {
 
 
     @PostMapping("/sendEmail")
-    public R sendEmail(@RequestParam("email") String email, HttpServletRequest request) {
+    public R sendEmail(@RequestBody Map<String, Object> body, HttpServletRequest request) {
 
         String uniqueId = request.getHeader(CommonConstants.X_UNIQUE_ID);
         if (StringUtils.isEmpty(uniqueId)) {
             throw new CustomException("请求头不存在唯一ID");
         }
+        String email =(String) body.get("email");
         if (StringUtils.isEmpty(email) || !email.matches(CommonConstants.EMAIL_PATTERN)) {
             throw new CustomException("\"邮箱为空\"或\"邮箱格式不正确\"");
         }
