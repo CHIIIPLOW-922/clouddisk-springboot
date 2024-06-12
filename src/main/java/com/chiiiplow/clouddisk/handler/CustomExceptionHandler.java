@@ -5,7 +5,7 @@ import com.chiiiplow.clouddisk.common.R;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -39,9 +39,9 @@ public class CustomExceptionHandler {
         if (e instanceof MethodArgumentNotValidException) {
             // BeanValidation exception
             MethodArgumentNotValidException ex = (MethodArgumentNotValidException) e;
-            FieldError fieldError = ex.getBindingResult().getFieldErrors().get(0);
-            if (!ObjectUtils.isEmpty(fieldError)) {
-                message = fieldError.getDefaultMessage();
+            ObjectError objectError = ex.getBindingResult().getAllErrors().get(0);
+            if (!ObjectUtils.isEmpty(objectError)) {
+                message = objectError.getDefaultMessage();
             }
         } else if (e instanceof ConstraintViolationException) {
             // BeanValidation GET simple param
