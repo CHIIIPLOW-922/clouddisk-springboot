@@ -75,7 +75,7 @@ public class UserController extends BaseController {
             throw new CustomException("\"邮箱为空\"或\"邮箱格式不正确\"");
         }
         userService.sendEmailVerifyCode(email, uniqueId);
-        return successResult(null);
+        return successResult();
 
     }
 

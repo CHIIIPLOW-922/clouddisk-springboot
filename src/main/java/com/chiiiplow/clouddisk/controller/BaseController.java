@@ -21,4 +21,11 @@ public class BaseController {
         r.setData(data);
         return r;
     }
+
+    public <T> R successResult() {
+        R<T> r = new R<>();
+        r.setCode(HttpServletResponse.SC_OK);
+        r.setMsg(MessageConstants.SUCCESS);
+        return r;
+    }
 }
