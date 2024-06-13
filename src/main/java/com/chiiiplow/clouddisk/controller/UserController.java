@@ -42,21 +42,22 @@ public class UserController extends BaseController {
 
         String captchaImage = CaptchaUtils.generateCaptchaImage(captchaText);
 
-        return successResult(captchaImage);
+        return successResult(null, captchaImage);
 
     }
 
 
     @PostMapping("/register")
     public R register(@RequestBody @Validated RegisterVO registerVO, HttpServletRequest request) {
-        return new R();
+        userService.register(registerVO, request);
+        return successResult("注册成功!", null);
 
     }
 
     @PostMapping("/login")
     public R login(@RequestBody @Validated LoginVO loginVO, HttpServletRequest request) {
         UserVO userVO = userService.login(loginVO, request);
-        return successResult(userVO);
+        return successResult("登录成功!", userVO);
     }
 
 
@@ -72,7 +73,7 @@ public class UserController extends BaseController {
             throw new CustomException("\"邮箱为空\"或\"邮箱格式不正确\"");
         }
         userService.sendEmailVerifyCode(email, uniqueId);
-        return successResult();
+        return successResult("邮件发送成功", null);
 
     }
 

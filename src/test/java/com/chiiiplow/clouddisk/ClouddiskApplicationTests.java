@@ -62,7 +62,7 @@ public class ClouddiskApplicationTests {
     @Test
     void contextLoads() {
         User user = new User();
-        user.setUserName("Test2");
+        user.setUsername("Test2");
         user.setUserNickname("CHIIIPLOW");
         user.setEmail("1641484973@qq.com");
         String salt = SHA256Utils.generateSalt();

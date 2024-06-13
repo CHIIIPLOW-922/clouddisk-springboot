@@ -2,6 +2,7 @@ package com.chiiiplow.clouddisk.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.chiiiplow.clouddisk.annotation.CheckDuplicateKey;
 import com.chiiiplow.clouddisk.component.RedisComponent;
 import com.chiiiplow.clouddisk.constant.CommonConstants;
 import com.chiiiplow.clouddisk.dao.UserMapper;
@@ -58,7 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
         }
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
-        userQueryWrapper.eq("user_name", loginVO.getUsername());
+        userQueryWrapper.eq("username", loginVO.getUsername());
         User user = userMapper.selectOne(userQueryWrapper);
         if (ObjectUtils.isEmpty(user)) {
             throw new CustomException("该用户不存在，请重试！");
@@ -75,15 +76,43 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void register(RegisterVO registerVO) {
-        return;
+    public void register(RegisterVO registerVO, HttpServletRequest request) {
+        String uniqueId = request.getHeader(CommonConstants.X_UNIQUE_ID);
+        String redisEmailCode = StringUtils.isEmpty(redisComponent.getEmailCode(uniqueId)) ? "1" : redisComponent.getEmailCode(uniqueId);
+        if (!StringUtils.equals(registerVO.getEmailValidCode(), redisEmailCode)) {
+            throw new CustomException("邮箱验证码不正确或已过期，请重试！");
+        }
+        User registerUser = new User();
+        BeanUtils.copyProperties(registerVO, registerUser);
+        String password = registerUser.getPassword();
+        String salt = SHA256Utils.generateSalt();
+        registerUser.setSalt(salt);
+        String encodePassword = SHA256Utils.encode(password, salt);
+        registerUser.setPassword(encodePassword);
+        //默认先给用户昵称为账号
+        registerUser.setUserNickname(registerUser.getUsername());
+        //用户注册初始给1GB
+        registerUser.setTotalDiskSpace(CommonConstants.ONE_GB);
+        try {
+            userMapper.insert(registerUser);
+        } catch (Exception e) {
+            throw new CustomException("注册用户失败,请重试!");
+        }
     }
 
     @Override
-    public void sendEmailVerifyCode(String email, String uniqueId) {
+    public void sendEmailVerifyCode(@CheckDuplicateKey(message = "该邮件已注册")  String email, String uniqueId) {
         String verifyCode = String.format("%06d", (int) (Math.random() * 1000000));
         redisComponent.saveEmailCode(uniqueId, verifyCode);
-        emailUtils.sendEmail(email, "[Clouddisk网盘系统]短信验证", "[Clouddisk网盘系统] 亲爱的用户，感谢您使用我们的服务！您的验证码是：  "
-                + verifyCode + "  请在10分钟内输入此验证码进行验证。如果您没有请求此验证码，请忽略此邮件。谢谢！");
+        emailUtils.sendEmail(email, "[CloudDisk网盘系统]短信验证", buildEmailContent(verifyCode));
+    }
+
+
+    private String buildEmailContent(String verifyCode) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[CloudDisk网盘系统] 亲爱的用户，您的邮箱验证码为: ");
+        builder.append(verifyCode);
+        builder.append("。请在10分钟内，输入此验证码进行验证。如果您没有请求该系统邮箱验证码，请忽略此邮件，谢谢！[CHIIIPLOW]");
+        return builder.toString();
     }
 }

@@ -2,6 +2,7 @@ package com.chiiiplow.clouddisk.handler;
 
 
 import com.chiiiplow.clouddisk.common.R;
+import com.chiiiplow.clouddisk.exception.CustomException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindException;
@@ -22,8 +23,8 @@ import java.util.stream.Collectors;
 public class CustomExceptionHandler {
 
 
-    @ExceptionHandler(Exception.class)
-    public <T> R<T> throwCommonError(Exception e) {
+    @ExceptionHandler(CustomException.class)
+    public <T> R<T> throwCommonError(CustomException e) {
         R<T> r = new R();
         r.setCode(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         r.setMsg(e.getMessage());
@@ -35,7 +36,7 @@ public class CustomExceptionHandler {
     public <T> R<T> throwValidationErrors(Exception e) {
         R<T> r = new R<>();
         r.setCode(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        String message = "未知错误";
+        String message = "字段校验错误";
         if (e instanceof MethodArgumentNotValidException) {
             // BeanValidation exception
             MethodArgumentNotValidException ex = (MethodArgumentNotValidException) e;

@@ -29,7 +29,7 @@ public class User implements Serializable {
     /**
      * username
      */
-    private String userName;
+    private String username;
 
     /**
      * nickname

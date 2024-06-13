@@ -19,6 +19,10 @@ public interface CommonConstants {
     long ONE_DAY = 24 * ONE_HOUR;
 
 
+    long ONE_GB = 1L * 1024 * 1024 * 1024;
+
+
+
     String X_UNIQUE_ID = "X-Unique-Id";
 
     String HEADER_TOKEN = "Authorization";

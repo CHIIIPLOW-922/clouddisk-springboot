@@ -18,7 +18,7 @@
 ```mysql
 CREATE TABLE IF NOT EXISTS `user` (
 	`id` bigint NOT NULL COMMENT 'user id',
-	`user_name` VARCHAR(20) DEFAULT NULL COMMENT 'username',
+	`username` VARCHAR(20) DEFAULT NULL COMMENT 'username',
 	`user_nickname` VARCHAR(20) DEFAULT NULL COMMENT 'nickname',
 	`user_avatar_path` VARCHAR(255) DEFAULT NULL COMMENT 'avatar path',
 	`email` VARCHAR(255) DEFAULT NULL COMMENT 'email',
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 	`total_disk_space` bigint DEFAULT NULL COMMENT 'total space',
 	PRIMARY KEY (`id`),
 	UNIQUE KEY `uni_email` (`email`),
-	UNIQUE KEY `uni_user_name` (`user_name`),
+	UNIQUE KEY `uni_user_name` (`username`),
 	KEY `idx_nick_name` (`user_nickname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='User Table';
 ```

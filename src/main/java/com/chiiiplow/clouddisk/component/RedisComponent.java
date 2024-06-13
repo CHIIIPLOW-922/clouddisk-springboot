@@ -44,5 +44,9 @@ public class RedisComponent {
         return redisUtils.setex(RedisConstants.EMAIL_KEY + key, code, CommonConstants.ONE_MINUTE * 10);
     }
 
+    public String getEmailCode(String key) {
+        return (String) redisUtils.get(RedisConstants.EMAIL_KEY + key);
+    }
+
 
 }

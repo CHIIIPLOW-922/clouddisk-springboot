@@ -22,10 +22,19 @@ public class BaseController {
         return r;
     }
 
+
     public <T> R successResult() {
         R<T> r = new R<>();
         r.setCode(HttpServletResponse.SC_OK);
         r.setMsg(MessageConstants.SUCCESS);
+        return r;
+    }
+
+    public <T> R successResult(String msg, T data) {
+        R<T> r = new R<>();
+        r.setCode(HttpServletResponse.SC_OK);
+        r.setMsg(msg);
+        r.setData(data);
         return r;
     }
 }
