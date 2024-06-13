@@ -85,4 +85,21 @@ public class RedisUtils<V> {
             return false;
         }
     }
+
+
+    public Long increment(String key) {
+        try {
+            return redisTemplate.opsForValue().increment(key);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public boolean expire(String key, long time) {
+        try {
+            return redisTemplate.expire(key, time, TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

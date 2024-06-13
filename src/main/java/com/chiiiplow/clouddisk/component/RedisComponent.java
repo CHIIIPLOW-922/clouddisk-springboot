@@ -49,4 +49,11 @@ public class RedisComponent {
     }
 
 
+    public Long incrementIp(String ip) {
+        return redisUtils.increment(RedisConstants.REQUEST_LIMIT + ip);
+    }
+
+    public boolean expireIpLimit(String ip, long time) {
+        return redisUtils.expire(RedisConstants.REQUEST_LIMIT + ip, time);
+    }
 }

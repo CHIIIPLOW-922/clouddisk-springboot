@@ -14,4 +14,6 @@ public interface RedisConstants {
 
     String EMAIL_KEY = "clouddisk:email:";
 
+    String REQUEST_LIMIT = "clouddisk:limit:";
+
 }
