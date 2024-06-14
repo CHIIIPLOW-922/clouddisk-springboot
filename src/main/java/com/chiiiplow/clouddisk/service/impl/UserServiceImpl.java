@@ -18,6 +18,7 @@ import com.chiiiplow.clouddisk.utils.EmailUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -97,6 +98,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         registerUser.setTotalDiskSpace(CommonConstants.ONE_GB);
         try {
             userMapper.insert(registerUser);
+        } catch (DuplicateKeyException ex) {
+            throw new CustomException("注册用户(账号或邮箱)已存在！");
         } catch (Exception e) {
             throw new CustomException("注册用户失败,请重试!");
         }

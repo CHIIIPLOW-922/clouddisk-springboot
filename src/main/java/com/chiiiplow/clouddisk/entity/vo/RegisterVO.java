@@ -1,6 +1,5 @@
 package com.chiiiplow.clouddisk.entity.vo;
 
-import com.chiiiplow.clouddisk.annotation.CheckDuplicateKey;
 import com.chiiiplow.clouddisk.annotation.PasswordMatches;
 import lombok.Data;
 
@@ -22,7 +21,6 @@ public class RegisterVO {
     @NotBlank(message = "注册账号不能为空")
     @Pattern(regexp = "^[a-zA-Z0-9]{6,25}$", message = "注册账号只能使用数字和字母")
     @Size(min = 6, max = 25, message = "账号长度必须在6~25位")
-    @CheckDuplicateKey(message = "该账号已被注册")
     private String username;
 
     @NotBlank(message = "注册密码不能为空")
@@ -38,7 +36,6 @@ public class RegisterVO {
 
     @NotBlank(message = "注册邮箱不能为空")
     @Email(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "邮箱格式不正确")
-    @CheckDuplicateKey(message = "该邮箱已被注册")
     private String email;
 
     @NotBlank(message = "邮箱验证码不能为空")
