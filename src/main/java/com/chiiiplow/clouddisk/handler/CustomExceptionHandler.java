@@ -5,6 +5,7 @@ import com.chiiiplow.clouddisk.common.R;
 import com.chiiiplow.clouddisk.exception.CustomException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
@@ -27,12 +28,17 @@ public class CustomExceptionHandler {
     @ExceptionHandler(Exception.class)
     public <T> R<T> throwCommonError(Exception e) {
         R<T> r = new R();
+        String message = null;
         r.setCode(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         if (e instanceof CustomException) {
-            r.setMsg(e.getMessage());
+            message = e.getMessage();
         }else if (e instanceof DuplicateKeyException) {
-            r.setMsg("接口请求时，有字段冲突！");
+            message = e.getMessage();
+        }else if (e instanceof HttpMessageNotReadableException) {
+            message = "请求参数或请求方式有错误";
         }
+        String error = StringUtils.isEmpty(message) ? "未知错误" : message;
+        r.setMsg(error);
         return r;
 
     }

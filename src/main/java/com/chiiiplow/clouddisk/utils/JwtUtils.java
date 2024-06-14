@@ -44,7 +44,7 @@ public class JwtUtils {
         String jwt = JWT.create()
                 .withJWTId(jwtUuid)
                 .withClaim("id", userVO.getId())
-                .withClaim("username", userVO.getUserName())
+                .withClaim("username", userVO.getUsername())
                 .withClaim("email", userVO.getEmail())
                 .withClaim("userNickname", userVO.getUserNickname())
                 .withClaim("userAvatarPath", userVO.getUserAvatarPath())

@@ -1,6 +1,8 @@
 package com.chiiiplow.clouddisk.controller;
 
 
+import com.chiiiplow.clouddisk.annotation.AccessLimit;
+import com.chiiiplow.clouddisk.annotation.RequiresLogin;
 import com.chiiiplow.clouddisk.common.R;
 import com.chiiiplow.clouddisk.component.RedisComponent;
 import com.chiiiplow.clouddisk.constant.CommonConstants;
@@ -33,6 +35,7 @@ public class UserController extends BaseController {
 
 
     @GetMapping("/generateCaptcha")
+    @AccessLimit(key = "captcha", count = 30)
     public R generateCaptcha(HttpServletRequest request) throws IOException {
         String uniqueId = request.getHeader(CommonConstants.X_UNIQUE_ID);
         // Generate captcha text
@@ -62,6 +65,7 @@ public class UserController extends BaseController {
 
 
     @PostMapping("/sendEmail")
+    @AccessLimit(key = "email", count = 10)
     public R sendEmail(@RequestBody Map<String, Object> body, HttpServletRequest request) {
 
         String uniqueId = request.getHeader(CommonConstants.X_UNIQUE_ID);
@@ -75,6 +79,14 @@ public class UserController extends BaseController {
         userService.sendEmailVerifyCode(email, uniqueId);
         return successResult("邮件发送成功", null);
 
+    }
+
+
+    @PostMapping("/logout")
+    @RequiresLogin
+    public R logout(HttpServletRequest request) {
+        userService.logout(request);
+        return successResult("登出成功！", null);
     }
 
 
