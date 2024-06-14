@@ -1,6 +1,5 @@
 package com.chiiiplow.clouddisk.entity.vo;
 
-import com.chiiiplow.clouddisk.annotation.PasswordMatches;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -15,7 +14,6 @@ import javax.validation.constraints.Size;
  * @date 2024/06/08
  */
 @Data
-@PasswordMatches
 public class RegisterVO {
 
     @NotBlank(message = "注册账号不能为空")

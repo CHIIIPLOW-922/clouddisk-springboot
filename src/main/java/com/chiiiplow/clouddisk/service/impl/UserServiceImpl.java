@@ -85,6 +85,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!StringUtils.equals(registerVO.getEmailValidCode(), redisEmailCode)) {
             throw new CustomException("邮箱验证码不正确或已过期，请重试！");
         }
+        if (!StringUtils.equals(registerVO.getPassword(), registerVO.getRepassword())) {
+            throw new CustomException("两次密码输入不一致！");
+        }
         User registerUser = new User();
         BeanUtils.copyProperties(registerVO, registerUser);
         String password = registerUser.getPassword();
