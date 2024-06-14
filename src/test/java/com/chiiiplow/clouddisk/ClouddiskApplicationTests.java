@@ -176,7 +176,7 @@ public class ClouddiskApplicationTests {
     void test9() {
         UserVO userVO = new UserVO();
         userVO.setId(IdWorker.getId());
-        userVO.setUserName("123");
+        userVO.setUsername("123");
         String s = jwtUtils.generateJwt(userVO);
         System.out.println(s);
     }

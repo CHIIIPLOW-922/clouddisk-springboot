@@ -18,6 +18,12 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * 请求限制切面
+ *
+ * @author yangzhixiong
+ * @date 2024/06/14
+ */
 @Aspect
 @Component
 @EnableAspectJAutoProxy

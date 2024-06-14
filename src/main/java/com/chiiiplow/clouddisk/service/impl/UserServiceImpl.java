@@ -1,5 +1,6 @@
 package com.chiiiplow.clouddisk.service.impl;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chiiiplow.clouddisk.component.RedisComponent;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -98,6 +100,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         } catch (Exception e) {
             throw new CustomException("注册用户失败,请重试!");
         }
+    }
+
+    @Override
+    public void logout(HttpServletRequest request) {
+        String jwtToken = request.getHeader(CommonConstants.HEADER_TOKEN).substring(7);
+        DecodedJWT decodedJWT = jwtUtils.decodedJWT(jwtToken);
+        String jwtUuid = decodedJWT.getId();
+        Date expiresAt = decodedJWT.getExpiresAt();
+        jwtUtils.deleteJwtToken(jwtUuid, expiresAt);
     }
 
     @Override

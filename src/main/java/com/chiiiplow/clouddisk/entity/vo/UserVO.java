@@ -14,7 +14,7 @@ public class UserVO {
     /**
      * username
      */
-    private String userName;
+    private String username;
 
     /**
      * nickname
