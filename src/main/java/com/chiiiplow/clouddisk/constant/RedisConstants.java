@@ -8,12 +8,12 @@ package com.chiiiplow.clouddisk.constant;
  */
 public interface RedisConstants {
 
-    String CAPTCHA_KEY = "clouddisk:captcha:";
+    String CAPTCHA_KEY = "user:captcha:";
 
     String JWT_BLACK_LIST = "jwt:blacklist:";
 
-    String EMAIL_KEY = "clouddisk:email:";
+    String EMAIL_KEY = "user:email:";
 
-    String REQUEST_LIMIT = "clouddisk:limit:";
+    String REQUEST_LIMIT = "api:limit:";
 
 }
