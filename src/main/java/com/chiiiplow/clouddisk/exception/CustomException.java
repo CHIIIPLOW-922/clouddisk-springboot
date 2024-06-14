@@ -1,7 +1,5 @@
 package com.chiiiplow.clouddisk.exception;
 
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * 自定义异常

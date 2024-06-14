@@ -4,6 +4,7 @@ package com.chiiiplow.clouddisk.handler;
 import com.chiiiplow.clouddisk.common.R;
 import com.chiiiplow.clouddisk.exception.CustomException;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
@@ -23,13 +24,17 @@ import java.util.stream.Collectors;
 public class CustomExceptionHandler {
 
 
-    @ExceptionHandler(CustomException.class)
-    public <T> R<T> throwCommonError(CustomException e) {
+    @ExceptionHandler(Exception.class)
+    public <T> R<T> throwCommonError(Exception e) {
         R<T> r = new R();
         r.setCode(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        r.setMsg(e.getMessage());
-
+        if (e instanceof CustomException) {
+            r.setMsg(e.getMessage());
+        }else if (e instanceof DuplicateKeyException) {
+            r.setMsg("接口请求时，有字段冲突！");
+        }
         return r;
+
     }
 
     @ExceptionHandler(value = {BindException.class, ValidationException.class, MethodArgumentNotValidException.class})

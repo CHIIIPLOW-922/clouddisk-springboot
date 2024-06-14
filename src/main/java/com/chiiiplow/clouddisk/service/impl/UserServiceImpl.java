@@ -2,7 +2,6 @@ package com.chiiiplow.clouddisk.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.chiiiplow.clouddisk.annotation.CheckDuplicateKey;
 import com.chiiiplow.clouddisk.component.RedisComponent;
 import com.chiiiplow.clouddisk.constant.CommonConstants;
 import com.chiiiplow.clouddisk.dao.UserMapper;
@@ -22,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 /**
  * 用户服务实现层
@@ -101,7 +101,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void sendEmailVerifyCode(@CheckDuplicateKey(message = "该邮件已注册")  String email, String uniqueId) {
+    public void sendEmailVerifyCode(String email, String uniqueId) {
+        User user = userMapper.selectOne(new QueryWrapper<User>().eq("email", email));
+        if (!Objects.isNull(user)) {
+            throw new CustomException("邮箱已被注册");
+        }
         String verifyCode = String.format("%06d", (int) (Math.random() * 1000000));
         redisComponent.saveEmailCode(uniqueId, verifyCode);
         emailUtils.sendEmail(email, "[CloudDisk网盘系统]短信验证", buildEmailContent(verifyCode));
