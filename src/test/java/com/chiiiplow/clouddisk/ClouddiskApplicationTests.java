@@ -12,6 +12,7 @@ import com.chiiiplow.clouddisk.entity.vo.UserVO;
 import com.chiiiplow.clouddisk.utils.JwtUtils;
 import com.chiiiplow.clouddisk.utils.SHA256Utils;
 import com.chiiiplow.clouddisk.utils.EmailUtils;
+import io.jsonwebtoken.Claims;
 import io.minio.MinioClient;
 import io.minio.errors.*;
 import io.minio.messages.Bucket;
@@ -177,9 +178,20 @@ public class ClouddiskApplicationTests {
         UserVO userVO = new UserVO();
         userVO.setId(IdWorker.getId());
         userVO.setUsername("123");
+        userVO.setEmail("641484973@qq.com");
+        userVO.setUserNickname("Chiiiplow");
+        userVO.setUsedDiskSpace(0L);
+        userVO.setTotalDiskSpace(123L);
         String s = jwtUtils.generateJwt(userVO);
         System.out.println(s);
     }
+
+    @Test
+    void test10(){
+        Claims claims = jwtUtils.decodedJWT("eyJhbGciOiJIUzUxMiJ9.eyJ1c2VkRGlza1NwYWNlIjowLCJzdWIiOiIxMjMiLCJ1c2VyQXZhdGFyUGF0aCI6bnVsbCwidG90YWxEaXNrU3BhY2UiOjEyMywidXNlck5pY2tuYW1lIjoiQ2hpaWlwbG93IiwiZXhwIjoxNzE5MTEyMzI4LCJ1c2VySWQiOjE4MDIxNzczMTE2NzEzOTg0MDIsImlhdCI6MTcxODUwNzUyOCwiZW1haWwiOiI2NDE0ODQ5NzNAcXEuY29tIiwianRpIjoiNGFkODgwMDUtMjIxZS00NGMzLWFmNjEtNjhlYTUwZGE0YmM0IiwidXNlcm5hbWUiOiIxMjMifQ.Hz606BDblq_p9RXsTu7vuWc8PDpVoJIn8H92JC98M7MXRVuvRATljyfgxWlgYu5SPme_ZPaMALF1fePkvAU76w");
+        System.out.println(claims);
+    }
+
 
 
     @Test

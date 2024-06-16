@@ -1,6 +1,5 @@
 package com.chiiiplow.clouddisk.service.impl;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chiiiplow.clouddisk.component.RedisComponent;
@@ -15,6 +14,7 @@ import com.chiiiplow.clouddisk.service.UserService;
 import com.chiiiplow.clouddisk.utils.JwtUtils;
 import com.chiiiplow.clouddisk.utils.SHA256Utils;
 import com.chiiiplow.clouddisk.utils.EmailUtils;
+import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,9 +111,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public void logout(HttpServletRequest request) {
         String jwtToken = request.getHeader(CommonConstants.HEADER_TOKEN).substring(7);
-        DecodedJWT decodedJWT = jwtUtils.decodedJWT(jwtToken);
-        String jwtUuid = decodedJWT.getId();
-        Date expiresAt = decodedJWT.getExpiresAt();
+        Claims claims = jwtUtils.decodedJWT(jwtToken);
+        System.out.println(claims);
+        String jwtUuid = claims.getId();
+        Date expiresAt = claims.getExpiration();
         jwtUtils.deleteJwtToken(jwtUuid, expiresAt);
     }
 

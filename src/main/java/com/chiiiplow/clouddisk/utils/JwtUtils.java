@@ -1,20 +1,18 @@
 package com.chiiiplow.clouddisk.utils;
 
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.chiiiplow.clouddisk.component.RedisComponent;
 import com.chiiiplow.clouddisk.constant.CommonConstants;
 import com.chiiiplow.clouddisk.entity.vo.UserVO;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -38,41 +36,41 @@ public class JwtUtils {
 
 
     public String generateJwt(UserVO userVO) {
-        long now = new Date().getTime();
-        Algorithm algorithm = Algorithm.HMAC512(secret);
-        String jwtUuid = UUID.randomUUID().toString();
-        String jwt = JWT.create()
-                .withJWTId(jwtUuid)
-                .withClaim("id", userVO.getId())
-                .withClaim("username", userVO.getUsername())
-                .withClaim("email", userVO.getEmail())
-                .withClaim("userNickname", userVO.getUserNickname())
-                .withClaim("userAvatarPath", userVO.getUserAvatarPath())
-                .withClaim("usedDiskSpace", userVO.getUsedDiskSpace())
-                .withClaim("totalDiskSpace", userVO.getTotalDiskSpace())
-                .withExpiresAt(new Date(now + CommonConstants.ONE_DAY * expire))
-                .withIssuedAt(new Date())
-                .sign(algorithm);
-        return jwt;
+        long now = System.currentTimeMillis();
+        String jwtId = UUID.randomUUID().toString();
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("userId", userVO.getId());
+        resultMap.put("username", userVO.getUsername());
+        resultMap.put("userNickname", userVO.getUserNickname());
+        resultMap.put("userAvatarPath", userVO.getUserAvatarPath());
+        resultMap.put("email", userVO.getEmail());
+        resultMap.put("usedDiskSpace", userVO.getUsedDiskSpace());
+        resultMap.put("totalDiskSpace", userVO.getTotalDiskSpace());
+        return Jwts.builder()
+                .setClaims(resultMap)
+                .setSubject(userVO.getUsername())
+                .setIssuedAt(new Date(now))
+                .setExpiration(new Date(now + CommonConstants.ONE_DAY * 7))
+                .setId(jwtId)
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
     }
 
-    public DecodedJWT decodedJWT(String token) {
-        Algorithm algorithm = Algorithm.HMAC512(secret);
-        JWTVerifier verifier = JWT.require(algorithm).build();
+    public Claims decodedJWT(String token) {
         try {
-            DecodedJWT verify = verifier.verify(token);
-            if (isBlackListJwt(verify.getId())) {
+            Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+            if (isBlackListJwt(claims.getId())) {
                 return null;
             }
-            return new Date().after(verify.getExpiresAt()) ? null : verify;
-        } catch (JWTVerificationException e) {
+            return new Date().after(claims.getExpiration()) ? null : claims;
+        } catch (Exception e) {
             return null;
         }
     }
 
     public boolean invalidToken(String token) {
-        DecodedJWT decodedJWT = decodedJWT(token);
-        if (ObjectUtils.isEmpty(decodedJWT)) {
+        Claims claims = decodedJWT(token);
+        if (ObjectUtils.isEmpty(claims)) {
             return true;
         }
         return false;
@@ -90,6 +88,5 @@ public class JwtUtils {
     private boolean isBlackListJwt(String jwtId) {
         return redisComponent.hasJwtToken(jwtId);
     }
-
 
 }
