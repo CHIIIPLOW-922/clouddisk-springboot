@@ -12,7 +12,6 @@ import com.chiiiplow.clouddisk.entity.vo.UserVO;
 import com.chiiiplow.clouddisk.exception.CustomException;
 import com.chiiiplow.clouddisk.service.UserService;
 import com.chiiiplow.clouddisk.utils.CaptchaUtils;
-import com.chiiiplow.clouddisk.utils.JwtUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -34,8 +33,6 @@ public class UserController extends BaseController {
     @Autowired
     private RedisComponent redisComponent;
 
-    @Autowired
-    private JwtUtils jwtUtils;
 
 
     @GetMapping("/generateCaptcha")
@@ -49,7 +46,7 @@ public class UserController extends BaseController {
 
         String captchaImage = CaptchaUtils.generateCaptchaImage(captchaText);
 
-        return successResult(null, captchaImage);
+        return successResult(captchaImage);
 
     }
 

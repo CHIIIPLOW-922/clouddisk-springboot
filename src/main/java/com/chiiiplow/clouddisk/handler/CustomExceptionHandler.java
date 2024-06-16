@@ -3,15 +3,19 @@ package com.chiiiplow.clouddisk.handler;
 
 import com.chiiiplow.clouddisk.common.R;
 import com.chiiiplow.clouddisk.exception.CustomException;
+import jdk.nashorn.internal.runtime.options.Option;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
@@ -25,19 +29,25 @@ import java.util.stream.Collectors;
 public class CustomExceptionHandler {
 
 
-    @ExceptionHandler(Exception.class)
-    public <T> R<T> throwCommonError(Exception e) {
+    @ExceptionHandler(Throwable.class)
+    public <T> R<T> throwCommonError(Throwable e) {
         R<T> r = new R();
         String message = null;
+        Integer code = null;
         r.setCode(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         if (e instanceof CustomException) {
             message = e.getMessage();
-        }else if (e instanceof DuplicateKeyException) {
-            message = e.getMessage();
-        }else if (e instanceof HttpMessageNotReadableException) {
+        }else if (e instanceof HttpMessageNotReadableException || e instanceof HttpRequestMethodNotSupportedException) {
             message = "请求参数或请求方式有错误";
+        }else if (e instanceof NoHandlerFoundException) {
+            code = HttpServletResponse.SC_NOT_FOUND;
+            message = "请求接口不存在";
+        }else if (e instanceof DuplicateKeyException) {
+            message = "请求参数中，有字段与数据库冲突！";
         }
         String error = StringUtils.isEmpty(message) ? "未知错误" : message;
+        int errorCode = ObjectUtils.isEmpty(code) ? HttpServletResponse.SC_INTERNAL_SERVER_ERROR : code;
+        r.setCode(errorCode);
         r.setMsg(error);
         return r;
 

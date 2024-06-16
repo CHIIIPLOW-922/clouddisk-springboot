@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 文件模块设计：文件ID用雪花算法生成，文件模块需要关联用户id以便于连表查询对应文件所属用户，需要文件名字段记录文件名称，以及文件大小、文件类型、文件为目录文件夹还是普通文件、需要一个字段确定是否有上级文件夹、文件路径(存在MinIO中的路径)、文件上传时间、文件修改时间、文件上传状态、文件回收站时间、是否被删除
 表设计
+
 ```mysql
 CREATE TABLE IF NOT EXISTS `file` (
     `id` bigint NOT NULL COMMENT 'file_id',
@@ -74,3 +75,10 @@ CREATE TABLE IF NOT EXISTS `admin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Admin';
 ```
 
+
+
+### 接口设计
+
+通过接口上添加注解的形式，利用aop切面编程，设置接口防刷机制。并且通过jwt设置用户token，通过redis保存用户登出操作后，保存未到过期时间的token，保证用户登出后，该token无效化。
+
+接口参数校验：通过spring-boot-starter-validation依赖，为接口入参进行参数校验。并通过@RestControllerAdvice获取指定异常，并自定义异常返回结果。

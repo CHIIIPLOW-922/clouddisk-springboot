@@ -39,7 +39,7 @@ public class JwtUtils {
         long now = System.currentTimeMillis();
         String jwtId = UUID.randomUUID().toString();
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("userId", userVO.getId());
+        resultMap.put("id", userVO.getId());
         resultMap.put("username", userVO.getUsername());
         resultMap.put("userNickname", userVO.getUserNickname());
         resultMap.put("userAvatarPath", userVO.getUserAvatarPath());
@@ -50,7 +50,7 @@ public class JwtUtils {
                 .setClaims(resultMap)
                 .setSubject(userVO.getUsername())
                 .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + CommonConstants.ONE_DAY * 7))
+                .setExpiration(new Date(now + CommonConstants.ONE_DAY * expire))
                 .setId(jwtId)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();

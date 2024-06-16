@@ -8,6 +8,11 @@ server:
   servlet:
     context-path: /clouddisk
 spring:
+  web:
+    resources:
+      add-mappings: false
+  mvc:
+    throw-exception-if-no-handler-found: true
   profiles:
     active: dev
   datasource:
