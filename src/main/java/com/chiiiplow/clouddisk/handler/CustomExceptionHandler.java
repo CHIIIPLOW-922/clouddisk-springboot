@@ -14,13 +14,13 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,20 +29,22 @@ import java.util.stream.Collectors;
 public class CustomExceptionHandler {
 
 
-    @ExceptionHandler(Throwable.class)
-    public <T> R<T> throwCommonError(Throwable e) {
+    @ExceptionHandler(Exception.class)
+    public <T> R<T> throwCommonError(Exception e) {
         R<T> r = new R();
         String message = null;
         Integer code = null;
         r.setCode(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         if (e instanceof CustomException) {
+            Integer custCode = Objects.isNull(((CustomException) e).getCode()) ? null : ((CustomException) e).getCode();
+            code = custCode;
             message = e.getMessage();
-        }else if (e instanceof HttpMessageNotReadableException || e instanceof HttpRequestMethodNotSupportedException) {
+        } else if (e instanceof HttpMessageNotReadableException || e instanceof HttpRequestMethodNotSupportedException) {
             message = "请求参数或请求方式有错误";
-        }else if (e instanceof NoHandlerFoundException) {
+        } else if (e instanceof NoHandlerFoundException) {
             code = HttpServletResponse.SC_NOT_FOUND;
             message = "请求接口不存在";
-        }else if (e instanceof DuplicateKeyException) {
+        } else if (e instanceof DuplicateKeyException) {
             message = "请求参数中，有字段与数据库冲突！";
         }
         String error = StringUtils.isEmpty(message) ? "未知错误" : message;
@@ -84,8 +86,6 @@ public class CustomExceptionHandler {
         r.setMsg(message);
         return r;
     }
-
-
 
 
 }

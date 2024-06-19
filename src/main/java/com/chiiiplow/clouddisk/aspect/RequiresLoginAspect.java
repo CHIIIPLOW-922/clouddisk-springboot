@@ -40,12 +40,16 @@ public class RequiresLoginAspect {
     @Before(value = "requiresLoginAspect()")
     public void needLogin() throws CustomException {
         String jwtToken = request.getHeader(CommonConstants.HEADER_TOKEN);
+        CustomException customException = new CustomException();
+        customException.setCode(555);
         if (StringUtils.isEmpty(jwtToken) || !jwtToken.startsWith("Bearer ")) {
-            throw new CustomException("请登录后操作！");
+            customException.setMessage("请登录后操作！");
+            throw customException;
         }
         String subJwtToken = jwtToken.substring(7);
         if (jwtUtils.invalidToken(subJwtToken)) {
-            throw new CustomException("用户Token或已过期，请重新登录！");
+            customException.setMessage("用户Token或已过期，请重新登录！");
+            throw customException;
         }
     }
 
