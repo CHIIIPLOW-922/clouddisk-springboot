@@ -54,6 +54,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public UserVO login(LoginVO loginVO, HttpServletRequest request) {
         if (loginVO.getShowCaptcha()) {
+            if (StringUtils.isBlank(loginVO.getCaptcha())) {
+                throw new CustomException("请输入验证码！");
+            }
             String uniqueId = request.getHeader(CommonConstants.X_UNIQUE_ID);
             String redisCaptcha = StringUtils.isEmpty(redisComponent.getCaptchaKey(uniqueId)) ?
                     "1" : redisComponent.getCaptchaKey(uniqueId);

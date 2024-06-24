@@ -34,7 +34,6 @@ public class UserController extends BaseController {
     private RedisComponent redisComponent;
 
 
-
     @GetMapping("/generateCaptcha")
     @AccessLimit(key = "captcha")
     public R generateCaptcha(HttpServletRequest request) throws IOException {
@@ -75,7 +74,7 @@ public class UserController extends BaseController {
         if (StringUtils.isEmpty(uniqueId)) {
             throw new CustomException("请求头不存在唯一ID");
         }
-        String email =(String) body.get("email");
+        String email = (String) body.get("email");
         if (StringUtils.isEmpty(email) || !email.matches(CommonConstants.EMAIL_PATTERN)) {
             throw new CustomException("\"邮箱为空\"或\"邮箱格式不正确\"");
         }
@@ -92,8 +91,6 @@ public class UserController extends BaseController {
         userService.logout(request);
         return successResult("登出成功！", null);
     }
-
-
 
 
 }

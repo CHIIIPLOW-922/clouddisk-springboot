@@ -17,17 +17,17 @@ import javax.validation.constraints.Size;
 public class RegisterVO {
 
     @NotBlank(message = "注册账号不能为空")
-    @Pattern(regexp = "^[a-zA-Z0-9]{6,25}$", message = "注册账号只能使用数字和字母")
+    @Pattern(regexp = "^(?:[a-zA-Z]+|\\d+|[a-zA-Z\\d]+)$", message = "注册账号只能使用数字和字母，且长度为6到25个字符")
     @Size(min = 6, max = 25, message = "账号长度必须在6~25位")
     private String username;
 
     @NotBlank(message = "注册密码不能为空")
-    @Size(min = 8, max = 25, message = "账号长度必须在8~25位")
+    @Size(min = 8, max = 25, message = "注册密码长度必须在8~25位")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,25}$", message = "注册密码必须数字和字母组合")
     private String password;
 
     @NotBlank(message = "注册密码不能为空")
-    @Size(min = 8, max = 25, message = "账号长度必须在8~25位")
+    @Size(min = 8, max = 25, message = "注册密码长度必须在8~25位")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,25}$", message = "注册密码必须数字和字母组合")
     private String repassword;
 
