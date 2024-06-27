@@ -10,6 +10,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,8 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 @EnableAspectJAutoProxy
 public class RequiresLoginAspect {
 
-    @Autowired
-    private HttpServletRequest request;
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -39,6 +39,8 @@ public class RequiresLoginAspect {
 
     @Before(value = "requiresLoginAspect()")
     public void needLogin() throws CustomException {
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = requestAttributes.getRequest();
         String jwtToken = request.getHeader(CommonConstants.HEADER_TOKEN);
         CustomException customException = new CustomException();
         customException.setCode(555);

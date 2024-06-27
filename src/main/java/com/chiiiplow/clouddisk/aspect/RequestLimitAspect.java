@@ -65,7 +65,7 @@ public class RequestLimitAspect {
 
     }
 
-    @Before("execution(* com.chiiiplow.clouddisk.controller.*.*(..))")
+    @Before("execution(* com.chiiiplow.clouddisk.controller.*.*(..)) && !execution(* com.chiiiplow.clouddisk.controller.BaseController.*(..))")
     public void wholeControllerLimit() {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
