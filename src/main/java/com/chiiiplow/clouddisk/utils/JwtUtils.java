@@ -41,19 +41,16 @@ public class JwtUtils {
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("id", userVO.getId());
         resultMap.put("username", userVO.getUsername());
-        resultMap.put("userNickname", userVO.getUserNickname());
-        resultMap.put("userAvatarPath", userVO.getUserAvatarPath());
-        resultMap.put("email", userVO.getEmail());
-        resultMap.put("usedDiskSpace", userVO.getUsedDiskSpace());
-        resultMap.put("totalDiskSpace", userVO.getTotalDiskSpace());
-        return Jwts.builder()
+        Date expiration = new Date(now + CommonConstants.ONE_DAY * expire);
+        String token = Jwts.builder()
                 .setClaims(resultMap)
-                .setSubject(userVO.getUsername())
+//                .setSubject(userVO.getUsername())
                 .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + CommonConstants.ONE_DAY * expire))
+                .setExpiration(expiration)
                 .setId(jwtId)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
+        return token;
     }
 
     public Claims decodedJWT(String token) {

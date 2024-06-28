@@ -16,34 +16,4 @@ public class UserVO {
      */
     private String username;
 
-    /**
-     * nickname
-     */
-    private String userNickname;
-
-    /**
-     * avatar path
-     */
-    private String userAvatarPath;
-
-    /**
-     * email
-     */
-    private String email;
-
-
-    /**
-     * used space
-     */
-    private Long usedDiskSpace;
-
-    /**
-     * total space
-     */
-    private Long totalDiskSpace;
-
-    /**
-     * 令 牌
-     */
-    private String token;
 }

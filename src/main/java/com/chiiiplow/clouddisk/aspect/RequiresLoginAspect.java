@@ -32,6 +32,9 @@ public class RequiresLoginAspect {
     private JwtUtils jwtUtils;
 
 
+    private static final String BEARER = "Bearer ";
+
+
     @Pointcut("@annotation(com.chiiiplow.clouddisk.annotation.RequiresLogin)")
     private void requiresLoginAspect() {
 
@@ -44,7 +47,7 @@ public class RequiresLoginAspect {
         String jwtToken = request.getHeader(CommonConstants.HEADER_TOKEN);
         CustomException customException = new CustomException();
         customException.setCode(555);
-        if (StringUtils.isEmpty(jwtToken) || !jwtToken.startsWith("Bearer ")) {
+        if (StringUtils.isEmpty(jwtToken) || !jwtToken.startsWith(BEARER)) {
             customException.setMessage("请登录后操作！");
             throw customException;
         }
@@ -55,4 +58,16 @@ public class RequiresLoginAspect {
         }
     }
 
+
+//    private String getJwtFromCookies(HttpServletRequest request) {
+//        Cookie[] cookies = request.getCookies();
+//        if (cookies != null) {
+//            for (Cookie cookie : cookies) {
+//                if ("JWT-TOKEN".equals(cookie.getName())) {
+//                    return cookie.getValue();
+//                }
+//            }
+//        }
+//        return null;
+//    }
 }

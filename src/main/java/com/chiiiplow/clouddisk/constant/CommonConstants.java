@@ -1,6 +1,5 @@
 package com.chiiiplow.clouddisk.constant;
 
-import java.util.regex.Pattern;
 
 /**
  * 常用常量
@@ -27,6 +26,10 @@ public interface CommonConstants {
 
     String HEADER_TOKEN = "Authorization";
 
+    String USERNAME_PATTERN = "^(?:[a-zA-Z]+|\\\\d+|[a-zA-Z\\\\d]+)$";
+
     String EMAIL_PATTERN = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+
+    String PASSSWORD_PATTERN = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,25}$";
 
 }

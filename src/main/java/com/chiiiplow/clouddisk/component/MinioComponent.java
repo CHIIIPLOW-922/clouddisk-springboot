@@ -22,10 +22,12 @@ public class MinioComponent {
     @Autowired
     private MinioClient minioClient;
 
-    public void uploadFile(MultipartFile multipartFile) throws Exception{
-        if (!minioClient.bucketExists(minioProperties.getBucketName())) {
-            minioClient.makeBucket(minioProperties.getBucketName());
-        }
+//    public void uploadFile(MultipartFile multipartFile) throws Exception{
+//        if (!minioClient.bucketExists(minioProperties.getBucketName())) {
+//            minioClient.makeBucket(minioProperties.getBucketName());
+//        }
+//
+//    }
 
-    }
+
 }

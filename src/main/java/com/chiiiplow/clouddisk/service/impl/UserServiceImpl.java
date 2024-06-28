@@ -20,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +53,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
     @Override
-    public UserVO login(LoginVO loginVO, HttpServletRequest request) {
+    public String login(LoginVO loginVO, HttpServletRequest request) {
         if (loginVO.getShowCaptcha()) {
             if (StringUtils.isBlank(loginVO.getCaptcha())) {
                 throw new CustomException("请输入验证码！");
@@ -77,8 +78,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(user, userVO);
         String token = jwtUtils.generateJwt(userVO);
-        userVO.setToken(token);
-        return userVO;
+//        Cookie cookie = new Cookie("JWT-TOKEN", token);
+//        cookie.setSecure(true);
+//        cookie.setHttpOnly(true);
+//        cookie.setMaxAge(7 * 60 * 60 * 24);
+//        cookie.setPath("/");
+//        response.addCookie(cookie);
+//        userVO.setToken(token);
+        return token;
     }
 
     @Override
@@ -115,7 +122,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void logout(HttpServletRequest request) {
         String jwtToken = request.getHeader(CommonConstants.HEADER_TOKEN).substring(7);
         Claims claims = jwtUtils.decodedJWT(jwtToken);
-        System.out.println(claims);
         String jwtUuid = claims.getId();
         Date expiresAt = claims.getExpiration();
         jwtUtils.deleteJwtToken(jwtUuid, expiresAt);

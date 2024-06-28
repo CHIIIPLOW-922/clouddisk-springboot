@@ -1,14 +1,12 @@
 package com.chiiiplow.clouddisk.controller;
 
 
-import com.chiiiplow.clouddisk.annotation.AccessLimit;
 import com.chiiiplow.clouddisk.annotation.RequiresLogin;
 import com.chiiiplow.clouddisk.common.R;
 import com.chiiiplow.clouddisk.component.RedisComponent;
 import com.chiiiplow.clouddisk.constant.CommonConstants;
 import com.chiiiplow.clouddisk.entity.vo.LoginVO;
 import com.chiiiplow.clouddisk.entity.vo.RegisterVO;
-import com.chiiiplow.clouddisk.entity.vo.UserVO;
 import com.chiiiplow.clouddisk.exception.CustomException;
 import com.chiiiplow.clouddisk.service.UserService;
 import com.chiiiplow.clouddisk.utils.CaptchaUtils;
@@ -18,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
@@ -35,7 +34,6 @@ public class UserController extends BaseController {
 
 
     @GetMapping("/generateCaptcha")
-    @AccessLimit(key = "captcha")
     public R generateCaptcha(HttpServletRequest request) throws IOException {
         String uniqueId = request.getHeader(CommonConstants.X_UNIQUE_ID);
         // Generate captcha text
@@ -51,7 +49,6 @@ public class UserController extends BaseController {
 
 
     @PostMapping("/register")
-    @AccessLimit(key = "userRegister", count = 1)
     public R register(@RequestBody @Validated RegisterVO registerVO, HttpServletRequest request) {
         userService.register(registerVO, request);
         return successResult("注册成功!", null);
@@ -59,15 +56,13 @@ public class UserController extends BaseController {
     }
 
     @PostMapping("/login")
-    @AccessLimit(key = "userLogin", count = 1)
-    public R login(@RequestBody @Validated LoginVO loginVO, HttpServletRequest request) {
-        UserVO userVO = userService.login(loginVO, request);
-        return successResult("登录成功!", userVO);
+    public R login(@RequestBody @Validated LoginVO loginVO, HttpServletRequest request, HttpServletResponse response) {
+        String token = userService.login(loginVO, request);
+        return successResult("登录成功!", token);
     }
 
 
     @PostMapping("/sendEmail")
-    @AccessLimit(key = "email", count = 1)
     public R sendEmail(@RequestBody Map<String, Object> body, HttpServletRequest request) {
 
         String uniqueId = request.getHeader(CommonConstants.X_UNIQUE_ID);
@@ -86,7 +81,6 @@ public class UserController extends BaseController {
 
     @PostMapping("/logout")
     @RequiresLogin
-    @AccessLimit(key = "userLogout", count = 1)
     public R logout(HttpServletRequest request) {
         userService.logout(request);
         return successResult("登出成功！", null);
