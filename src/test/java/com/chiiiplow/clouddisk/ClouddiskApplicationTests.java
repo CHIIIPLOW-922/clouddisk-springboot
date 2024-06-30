@@ -202,7 +202,7 @@ public class ClouddiskApplicationTests {
 
     @Test
     void countSpace(){
-        long space = 1L * 1024 * 1024 * 980;
+        long space = 1L * 1024 * 1024 * 1021;
         User user = new User();
         user.setId(1801139900247425025L);
         user.setUsedDiskSpace(space);
