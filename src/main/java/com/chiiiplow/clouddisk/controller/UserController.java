@@ -5,8 +5,10 @@ import com.chiiiplow.clouddisk.annotation.RequiresLogin;
 import com.chiiiplow.clouddisk.common.R;
 import com.chiiiplow.clouddisk.component.RedisComponent;
 import com.chiiiplow.clouddisk.constant.CommonConstants;
+import com.chiiiplow.clouddisk.entity.dto.UsedDiskSpaceDTO;
 import com.chiiiplow.clouddisk.entity.vo.LoginVO;
 import com.chiiiplow.clouddisk.entity.vo.RegisterVO;
+import com.chiiiplow.clouddisk.entity.vo.UserVO;
 import com.chiiiplow.clouddisk.exception.CustomException;
 import com.chiiiplow.clouddisk.service.UserService;
 import com.chiiiplow.clouddisk.utils.CaptchaUtils;
@@ -83,7 +85,16 @@ public class UserController extends BaseController {
     @RequiresLogin
     public R logout(HttpServletRequest request) {
         userService.logout(request);
-        return successResult("登出成功！", null);
+        return successResult(null);
+    }
+
+    @GetMapping("/usedDiskSpace")
+    @RequiresLogin
+    public R usedDiskSpace (HttpServletRequest request) {
+        UserVO currentUser = getCurrentUser(request);
+        Long userId = currentUser.getId();
+        UsedDiskSpaceDTO usedDiskSpaceDTO = userService.usedDiskSpace(userId);
+        return successResult(usedDiskSpaceDTO);
     }
 
 

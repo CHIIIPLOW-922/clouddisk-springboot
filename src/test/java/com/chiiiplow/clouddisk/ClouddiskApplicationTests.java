@@ -178,10 +178,10 @@ public class ClouddiskApplicationTests {
         UserVO userVO = new UserVO();
         userVO.setId(IdWorker.getId());
         userVO.setUsername("123");
-        userVO.setEmail("641484973@qq.com");
-        userVO.setUserNickname("Chiiiplow");
-        userVO.setUsedDiskSpace(0L);
-        userVO.setTotalDiskSpace(123L);
+//        userVO.setEmail("641484973@qq.com");
+//        userVO.setUserNickname("Chiiiplow");
+//        userVO.setUsedDiskSpace(0L);
+//        userVO.setTotalDiskSpace(123L);
         String s = jwtUtils.generateJwt(userVO);
         System.out.println(s);
     }
@@ -197,5 +197,15 @@ public class ClouddiskApplicationTests {
     @Test
     void sendEmail() {
         sendEmailUtils.sendEmail("q641484973@gmail.com", "测试测试", "123123123");
+    }
+
+
+    @Test
+    void countSpace(){
+        long space = 1L * 1024 * 1024 * 980;
+        User user = new User();
+        user.setId(1801139900247425025L);
+        user.setUsedDiskSpace(space);
+        userMapper.updateById(user);
     }
 }

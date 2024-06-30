@@ -6,11 +6,13 @@ import com.chiiiplow.clouddisk.component.RedisComponent;
 import com.chiiiplow.clouddisk.constant.CommonConstants;
 import com.chiiiplow.clouddisk.dao.UserMapper;
 import com.chiiiplow.clouddisk.entity.User;
+import com.chiiiplow.clouddisk.entity.dto.UsedDiskSpaceDTO;
 import com.chiiiplow.clouddisk.entity.vo.LoginVO;
 import com.chiiiplow.clouddisk.entity.vo.RegisterVO;
 import com.chiiiplow.clouddisk.entity.vo.UserVO;
 import com.chiiiplow.clouddisk.exception.CustomException;
 import com.chiiiplow.clouddisk.service.UserService;
+import com.chiiiplow.clouddisk.utils.FileSizeConverter;
 import com.chiiiplow.clouddisk.utils.JwtUtils;
 import com.chiiiplow.clouddisk.utils.SHA256Utils;
 import com.chiiiplow.clouddisk.utils.EmailUtils;
@@ -20,7 +22,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -125,6 +126,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String jwtUuid = claims.getId();
         Date expiresAt = claims.getExpiration();
         jwtUtils.deleteJwtToken(jwtUuid, expiresAt);
+    }
+
+    @Override
+    public UsedDiskSpaceDTO usedDiskSpace(Long userId) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("id", userId);
+        User user = userMapper.selectOne(userQueryWrapper);
+        if (ObjectUtils.isEmpty(user)) {
+            throw new CustomException("该用户不存在！");
+        }
+        Long usedDiskSpace = user.getUsedDiskSpace();
+        Long totalDiskSpace = user.getTotalDiskSpace();
+        float rate = FileSizeConverter.calculateUsedSpaceRate(usedDiskSpace, totalDiskSpace);
+        String usedSpace = FileSizeConverter.convertBytesToReadableSize(usedDiskSpace);
+        String totalSpace = FileSizeConverter.convertBytesToReadableSize(totalDiskSpace);
+        UsedDiskSpaceDTO usedDiskSpaceDTO = new UsedDiskSpaceDTO();
+        usedDiskSpaceDTO.setUsedSpaceRate(rate);
+        usedDiskSpaceDTO.setUsedDiskSpace(usedSpace);
+        usedDiskSpaceDTO.setTotalDiskSpace(totalSpace);
+        return usedDiskSpaceDTO;
     }
 
     @Override

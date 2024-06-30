@@ -2,6 +2,7 @@ package com.chiiiplow.clouddisk.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.chiiiplow.clouddisk.entity.User;
+import com.chiiiplow.clouddisk.entity.dto.UsedDiskSpaceDTO;
 import com.chiiiplow.clouddisk.entity.vo.LoginVO;
 import com.chiiiplow.clouddisk.entity.vo.RegisterVO;
 import com.chiiiplow.clouddisk.entity.vo.UserVO;
@@ -41,4 +42,6 @@ public interface UserService extends IService<User> {
      * @param request 请求
      */
     void logout(HttpServletRequest request);
+
+    UsedDiskSpaceDTO usedDiskSpace(Long userId);
 }
