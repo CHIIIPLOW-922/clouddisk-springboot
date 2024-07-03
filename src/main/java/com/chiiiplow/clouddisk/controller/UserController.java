@@ -6,6 +6,7 @@ import com.chiiiplow.clouddisk.common.R;
 import com.chiiiplow.clouddisk.component.RedisComponent;
 import com.chiiiplow.clouddisk.constant.CommonConstants;
 import com.chiiiplow.clouddisk.entity.dto.UsedDiskSpaceDTO;
+import com.chiiiplow.clouddisk.entity.dto.UserInfoDTO;
 import com.chiiiplow.clouddisk.entity.vo.LoginVO;
 import com.chiiiplow.clouddisk.entity.vo.RegisterVO;
 import com.chiiiplow.clouddisk.entity.vo.UserVO;
@@ -95,6 +96,15 @@ public class UserController extends BaseController {
         Long userId = currentUser.getId();
         UsedDiskSpaceDTO usedDiskSpaceDTO = userService.usedDiskSpace(userId);
         return successResult(usedDiskSpaceDTO);
+    }
+
+    @GetMapping("/getUserInfo")
+    @RequiresLogin
+    public R getUserInfo(HttpServletRequest request) {
+        UserVO currentUser = getCurrentUser(request);
+        Long id = currentUser.getId();
+        UserInfoDTO userInfo = userService.getUserInfo(id);
+        return successResult(userInfo);
     }
 
 

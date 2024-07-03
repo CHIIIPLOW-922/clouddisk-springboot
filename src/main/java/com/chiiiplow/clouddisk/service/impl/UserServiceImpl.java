@@ -7,6 +7,7 @@ import com.chiiiplow.clouddisk.constant.CommonConstants;
 import com.chiiiplow.clouddisk.dao.UserMapper;
 import com.chiiiplow.clouddisk.entity.User;
 import com.chiiiplow.clouddisk.entity.dto.UsedDiskSpaceDTO;
+import com.chiiiplow.clouddisk.entity.dto.UserInfoDTO;
 import com.chiiiplow.clouddisk.entity.vo.LoginVO;
 import com.chiiiplow.clouddisk.entity.vo.RegisterVO;
 import com.chiiiplow.clouddisk.entity.vo.UserVO;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -76,6 +78,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!StringUtils.equals(user.getPassword(), loginEncodePassword)) {
             throw new CustomException("密码错误，请重试！");
         }
+//        user.setLastOnlineTime(LocalDateTime.now());
+//        userMapper.updateById(user);
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(user, userVO);
         String token = jwtUtils.generateJwt(userVO);
@@ -130,9 +134,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public UsedDiskSpaceDTO usedDiskSpace(Long userId) {
-        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
-        userQueryWrapper.eq("id", userId);
-        User user = userMapper.selectOne(userQueryWrapper);
+        User user = userMapper.selectById(userId);
         if (ObjectUtils.isEmpty(user)) {
             throw new CustomException("该用户不存在！");
         }
@@ -157,6 +159,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String verifyCode = String.format("%06d", (int) (Math.random() * 1000000));
         redisComponent.saveEmailCode(uniqueId, verifyCode);
         emailUtils.sendEmail(email, "[CloudDisk网盘系统]短信验证", buildEmailContent(verifyCode));
+    }
+
+
+    @Override
+    public UserInfoDTO getUserInfo(Long userId) {
+        User user = userMapper.selectById(userId);
+        if (ObjectUtils.isEmpty(user)) {
+            throw new CustomException("该用户不存在");
+        }
+        UserInfoDTO userInfoDTO = new UserInfoDTO();
+        BeanUtils.copyProperties(user, userInfoDTO);
+        return userInfoDTO;
     }
 
 

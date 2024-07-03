@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  *  MyBatis 元对象处理器
@@ -22,15 +22,15 @@ public class MyBatisMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, CREATE_TIME, Date.class, new Date());
-        this.strictInsertFill(metaObject, UPLOAD_TIME, Date.class, new Date());
-        this.strictInsertFill(metaObject, REGISTER_TIME, Date.class, new Date());
-        this.strictInsertFill(metaObject, MODIFY_TIME, Date.class, new Date());
+        this.strictInsertFill(metaObject, CREATE_TIME, LocalDateTime.class, LocalDateTime.now());
+        this.strictInsertFill(metaObject, UPLOAD_TIME, LocalDateTime.class, LocalDateTime.now());
+        this.strictInsertFill(metaObject, REGISTER_TIME, LocalDateTime.class, LocalDateTime.now());
+        this.strictInsertFill(metaObject, MODIFY_TIME, LocalDateTime.class, LocalDateTime.now());
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.strictUpdateFill(metaObject, MODIFY_TIME, Date.class, new Date());
+        this.strictUpdateFill(metaObject, MODIFY_TIME, LocalDateTime.class, LocalDateTime.now());
 
     }
 }

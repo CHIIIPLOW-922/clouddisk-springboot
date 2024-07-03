@@ -1,6 +1,7 @@
 package com.chiiiplow.clouddisk.config;
 
 import com.chiiiplow.clouddisk.constant.MinioProperties;
+import com.chiiiplow.clouddisk.exception.CustomException;
 import io.minio.MinioClient;
 import io.minio.errors.MinioException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class MinioConfig {
         try {
             return new MinioClient(minioProperties.getHost(), minioProperties.getAccessKey(), minioProperties.getSecretKey());
         } catch (MinioException e) {
-            throw new RuntimeException("Error creating MinioClient", e);
+            throw new CustomException("Error creating MinioClient", e);
         }
     }
 

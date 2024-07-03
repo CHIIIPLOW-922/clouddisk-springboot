@@ -27,7 +27,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -95,7 +95,7 @@ public class ClouddiskApplicationTests {
         admin.setSalt(salt);
         String encodePassword = SHA256Utils.encode("353906413", salt);
         admin.setAdminPassword(encodePassword);
-        admin.setCreateTime(new Date());
+        admin.setCreateTime(LocalDateTime.now());
         adminMapper.insert(admin);
     }
 
