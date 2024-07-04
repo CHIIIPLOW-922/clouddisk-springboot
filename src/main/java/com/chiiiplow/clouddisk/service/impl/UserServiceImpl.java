@@ -23,6 +23,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -124,12 +125,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void logout(HttpServletRequest request) {
         String jwtToken = request.getHeader(CommonConstants.HEADER_TOKEN).substring(7);
         Claims claims = jwtUtils.decodedJWT(jwtToken);
         String jwtUuid = claims.getId();
         Date expiresAt = claims.getExpiration();
         jwtUtils.deleteJwtToken(jwtUuid, expiresAt);
+        Long userId =(Long) claims.get("id");
+        User user = userMapper.selectById(userId);
+        if (ObjectUtils.isEmpty(user)) {
+            throw new CustomException("该用户不存在！");
+        }
+        user.setLastOnlineTime(LocalDateTime.now());
+        userMapper.updateById(user);
     }
 
     @Override

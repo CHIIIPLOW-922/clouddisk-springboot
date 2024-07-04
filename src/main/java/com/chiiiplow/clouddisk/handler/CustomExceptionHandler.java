@@ -25,6 +25,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 
+/**
+ * 自定义异常处理
+ *
+ * @author yangzhixiong
+ * @date 2024/07/04
+ */
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
