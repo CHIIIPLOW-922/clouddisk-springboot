@@ -1,6 +1,6 @@
 package com.chiiiplow.clouddisk;
 
-import com.chiiiplow.clouddisk.constant.MinioProperties;
+import com.chiiiplow.clouddisk.config.MinioConfig;
 import io.minio.MinioClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +22,12 @@ public class InitialRunner implements ApplicationRunner {
     private MinioClient minioClient;
 
     @Autowired
-    private MinioProperties minioProperties;
+    private MinioConfig minioConfig;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if (!minioClient.bucketExists(minioProperties.getBucketName())) {
-            minioClient.makeBucket(minioProperties.getBucketName());
+        if (!minioClient.bucketExists(minioConfig.getBucketName())) {
+            minioClient.makeBucket(minioConfig.getBucketName());
             log.info("create bucket");
         }
         log.info("bucket ready");

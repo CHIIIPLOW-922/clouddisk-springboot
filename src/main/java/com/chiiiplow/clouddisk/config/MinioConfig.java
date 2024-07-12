@@ -1,12 +1,14 @@
 package com.chiiiplow.clouddisk.config;
 
-import com.chiiiplow.clouddisk.constant.MinioProperties;
 import com.chiiiplow.clouddisk.exception.CustomException;
 import io.minio.MinioClient;
 import io.minio.errors.MinioException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.io.Serializable;
 
 
 /**
@@ -16,17 +18,22 @@ import org.springframework.context.annotation.Configuration;
  * @date 2024/06/04
  */
 @Configuration
-public class MinioConfig {
+@ConfigurationProperties(prefix = "minio")
+@Data
+public class MinioConfig implements Serializable {
+
+    private String accessKey;
+    private String secretKey;
+    private String bucketName;
+    private String host;
 
 
-    @Autowired
-    private MinioProperties minioProperties;
 
 
     @Bean
     public MinioClient minioClient() {
         try {
-            return new MinioClient(minioProperties.getHost(), minioProperties.getAccessKey(), minioProperties.getSecretKey());
+            return new MinioClient(host, accessKey, secretKey);
         } catch (MinioException e) {
             throw new CustomException("Error creating MinioClient", e);
         }
