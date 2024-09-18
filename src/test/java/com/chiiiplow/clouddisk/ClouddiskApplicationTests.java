@@ -3,7 +3,7 @@ package com.chiiiplow.clouddisk;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import com.chiiiplow.clouddisk.constant.MinioProperties;
+import com.chiiiplow.clouddisk.config.MinioConfig;
 import com.chiiiplow.clouddisk.dao.AdminMapper;
 import com.chiiiplow.clouddisk.dao.UserMapper;
 import com.chiiiplow.clouddisk.entity.Admin;
@@ -16,6 +16,7 @@ import io.jsonwebtoken.Claims;
 import io.minio.MinioClient;
 import io.minio.errors.*;
 import io.minio.messages.Bucket;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
@@ -32,6 +34,7 @@ import java.util.List;
 import java.util.Set;
 
 @SpringBootTest
+@Slf4j
 public class ClouddiskApplicationTests {
 
     @Resource
@@ -40,14 +43,15 @@ public class ClouddiskApplicationTests {
     @Resource
     private UserMapper userMapper;
 
-    @Autowired
-    private MinioProperties minioProperties;
 
     @Autowired
     private MinioClient minioClient;
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private MinioConfig minioConfig;
 
     /**
      * Redis 模板
@@ -99,19 +103,19 @@ public class ClouddiskApplicationTests {
         adminMapper.insert(admin);
     }
 
-    @Test
-    void test3() throws InvalidBucketNameException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException, RegionConflictException {
-        System.out.println(minioClient.bucketExists(minioProperties.getBucketName()));
-        if (!minioClient.bucketExists(minioProperties.getBucketName())) {
-            System.out.println("bucket不存在");
-            minioClient.makeBucket(minioProperties.getBucketName());
-            System.out.println("创建bucket成功");
-        } else {
-            List<Bucket> buckets = minioClient.listBuckets();
-            Bucket bucket = buckets.stream().filter(item -> item.name().equals(minioProperties.getBucketName())).findFirst().orElse(null);
-            System.out.println(bucket);
-        }
-    }
+//    @Test
+//    void test3() throws InvalidBucketNameException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException, RegionConflictException {
+//        System.out.println(minioClient.bucketExists(minioConfig.getBucketName()));
+//        if (!minioClient.bucketExists(minioConfig.getBucketName())) {
+//            System.out.println("bucket不存在");
+//            minioClient.makeBucket(minioConfig.getBucketName());
+//            System.out.println("创建bucket成功");
+//        } else {
+//            List<Bucket> buckets = minioClient.listBuckets();
+//            Bucket bucket = buckets.stream().filter(item -> item.name().equals(minioConfig.getBucketName())).findFirst().orElse(null);
+//            System.out.println(bucket);
+//        }
+//    }
 
     @Test
     void test4() {
@@ -161,6 +165,17 @@ public class ClouddiskApplicationTests {
 //        System.out.println(jwtUtils.validateToken(token));
 //    }
 
+
+    @Test
+    void learnHow2UseMinio() {
+//        try {
+//            String objectUrl = minioClient.getObjectUrl(minioConfig.getBucketName(), "Joji.png");
+//            log.info(objectUrl);
+//        } catch (Exception e) {
+//            log.error(e.getMessage());
+//        }
+    }
+
     @Test
     void test8() {
         Set<String> keys = redisTemplate.keys("*");
@@ -202,9 +217,9 @@ public class ClouddiskApplicationTests {
 
     @Test
     void countSpace(){
-        long space = 1L * 1024 * 1024 * 1021;
+        long space = 1L * 1024 * 1024 * 1024;
         User user = new User();
-        user.setId(1801139900247425025L);
+        user.setId(1808678160037265409L);
         user.setUsedDiskSpace(space);
         userMapper.updateById(user);
     }
