@@ -6,7 +6,7 @@
 		<!--user id-->
 		<id column="id" property="id"/>
 		<!--username-->
-		<result column="user_name" property="userName"/>
+		<result column="user_name" property="username"/>
 		<!--nickname-->
 		<result column="user_nickname" property="userNickname"/>
 		<!--avatar path-->

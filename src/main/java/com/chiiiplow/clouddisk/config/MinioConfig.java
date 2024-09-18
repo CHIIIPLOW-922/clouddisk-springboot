@@ -32,9 +32,13 @@ public class MinioConfig implements Serializable {
 
     @Bean
     public MinioClient minioClient() {
+        //            return new MinioClient(host, accessKey, secretKey);
         try {
-            return new MinioClient(host, accessKey, secretKey);
-        } catch (MinioException e) {
+            return new MinioClient.Builder()
+                    .endpoint(host)
+                    .credentials(accessKey, secretKey)
+                    .build();
+        } catch (Exception e) {
             throw new CustomException("Error creating MinioClient", e);
         }
     }

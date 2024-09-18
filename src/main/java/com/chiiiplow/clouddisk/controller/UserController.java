@@ -46,7 +46,7 @@ public class UserController extends BaseController {
 
         String captchaImage = CaptchaUtils.generateCaptchaImage(captchaText);
 
-        return successResult(captchaImage);
+        return R.ok(captchaImage);
 
     }
 
@@ -54,14 +54,14 @@ public class UserController extends BaseController {
     @PostMapping("/register")
     public R register(@RequestBody @Validated RegisterVO registerVO, HttpServletRequest request) {
         userService.register(registerVO, request);
-        return successResult("注册成功!", null);
+        return R.ok(null, "注册成功!");
 
     }
 
     @PostMapping("/login")
     public R login(@RequestBody @Validated LoginVO loginVO, HttpServletRequest request, HttpServletResponse response) {
         String token = userService.login(loginVO, request);
-        return successResult("登录成功!", token);
+        return R.ok(token, "登录成功!");
     }
 
 
@@ -77,7 +77,7 @@ public class UserController extends BaseController {
             throw new CustomException("\"邮箱为空\"或\"邮箱格式不正确\"");
         }
         userService.sendEmailVerifyCode(email, uniqueId);
-        return successResult("邮件发送成功", null);
+        return R.ok(null, "邮件发送成功");
 
     }
 
@@ -86,7 +86,7 @@ public class UserController extends BaseController {
     @RequiresLogin
     public R logout(HttpServletRequest request) {
         userService.logout(request);
-        return successResult(null);
+        return R.ok();
     }
 
     @GetMapping("/usedDiskSpace")
@@ -95,7 +95,7 @@ public class UserController extends BaseController {
         UserVO currentUser = getCurrentUser(request);
         Long userId = currentUser.getId();
         UsedDiskSpaceDTO usedDiskSpaceDTO = userService.usedDiskSpace(userId);
-        return successResult(usedDiskSpaceDTO);
+        return R.ok(usedDiskSpaceDTO);
     }
 
     @GetMapping("/getUserInfo")
@@ -104,7 +104,7 @@ public class UserController extends BaseController {
         UserVO currentUser = getCurrentUser(request);
         Long id = currentUser.getId();
         UserInfoDTO userInfo = userService.getUserInfo(id);
-        return successResult(userInfo);
+        return R.ok(userInfo);
     }
 
 

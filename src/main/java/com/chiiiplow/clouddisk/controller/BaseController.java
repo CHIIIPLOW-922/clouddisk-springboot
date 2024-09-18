@@ -25,29 +25,29 @@ public class BaseController {
     private static final String SUCCESS = "请求成功";
 
 
-    protected <T> R successResult(T data) {
-        R<T> r = new R<>();
-        r.setCode(HttpServletResponse.SC_OK);
-        r.setMsg(SUCCESS);
-        r.setData(data);
-        return r;
-    }
-
-
-    protected <T> R successResult() {
-        R<T> r = new R<>();
-        r.setCode(HttpServletResponse.SC_OK);
-        r.setMsg(SUCCESS);
-        return r;
-    }
-
-    protected <T> R successResult(String msg, T data) {
-        R<T> r = new R<>();
-        r.setCode(HttpServletResponse.SC_OK);
-        r.setMsg(msg);
-        r.setData(data);
-        return r;
-    }
+//    protected <T> R successResult(T data) {
+//        R<T> r = new R<>();
+//        r.setCode(HttpServletResponse.SC_OK);
+//        r.setMsg(SUCCESS);
+//        r.setData(data);
+//        return r;
+//    }
+//
+//
+//    protected <T> R successResult() {
+//        R<T> r = new R<>();
+//        r.setCode(HttpServletResponse.SC_OK);
+//        r.setMsg(SUCCESS);
+//        return r;
+//    }
+//
+//    protected <T> R successResult(String msg, T data) {
+//        R<T> r = new R<>();
+//        r.setCode(HttpServletResponse.SC_OK);
+//        r.setMsg(msg);
+//        r.setData(data);
+//        return r;
+//    }
 
     protected UserVO getCurrentUser(HttpServletRequest request) {
         String headerJwt = request.getHeader(CommonConstants.HEADER_TOKEN);
